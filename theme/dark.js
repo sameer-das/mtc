@@ -26,7 +26,7 @@ export const DarkScheme = {
     "outlineVariant": "rgb(77, 68, 76)",
     "shadow": "rgb(0, 0, 0)",
     "scrim": "rgb(0, 0, 0)",
-    "inverseSurface": "rgb(233, 224, 228)",
+    "inverseSurface": "rgb( , 224, 228)",
     "inverseOnSurface": "rgb(51, 47, 50)",
     "inversePrimary": "rgb(162, 0, 186)",
     "elevation": {

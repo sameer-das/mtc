@@ -50,7 +50,7 @@ const Login = () => {
           onChangeText={(nextValue: string) => setPassword(nextValue)}
         />
         <Button mode='contained' loading={loading} disabled={!username || !password} onPress={handleLogin}>Login</Button>
-        <Button mode='text' onPress={handleRegister}>Register</Button>
+        {/* <Button mode='text' onPress={handleRegister}>Register</Button> */}
       </View>
     </View>
   )

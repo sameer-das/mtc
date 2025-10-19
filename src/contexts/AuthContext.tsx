@@ -38,7 +38,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const login = async (userData: any) => {
     try {
-      await AsyncStorage.setItem('user', JSON.stringify(userData));
+      await AsyncStorage.setItem('user', JSON.stringify(userData)); 
+      await AsyncStorage.setItem('accessToken', userData.accessToken); 
+      await AsyncStorage.setItem('refreshToken', userData.refreshToken); 
       setUser(userData);
     } catch (error) {
       console.error('Failed to save user', error);

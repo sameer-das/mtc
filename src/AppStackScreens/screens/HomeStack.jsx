@@ -7,34 +7,35 @@ import SearchForm from './SearchForm';
 import OwnerDetailsForm from './OwnerDetailsForm';
 import PropertyDetailsForm from './PropertyDetailsForm'
 import { useTheme } from 'react-native-paper';
+import { PropertyProvider } from '../../contexts/PropertyContext';
 
 const Stack = createNativeStackNavigator();
 const TopTabs = createMaterialTopTabNavigator();
 
-const FormStack = () =>{
+const FormStack = () => {
     const theme = useTheme()
     return (
         <TopTabs.Navigator screenOptions={{
-            tabBarStyle: {backgroundColor: theme.colors.primary},
+            tabBarStyle: { backgroundColor: theme.colors.primary },
             tabBarActiveTintColor: theme.colors.onPrimary,
-            tabBarLabelStyle: {fontSize: 14, fontWeight: 'bold'}
+            tabBarLabelStyle: { fontSize: 14, fontWeight: 'bold' }
 
         }}>
             <TopTabs.Screen name='Owner Details' component={OwnerDetailsForm} />
             <TopTabs.Screen name='Property Details' component={PropertyDetailsForm} />
-        </TopTabs.Navigator>
+        </TopTabs.Navigator >
     )
 }
 
 const HomeStack = () => {
     return (
-        <Stack.Navigator screenOptions={({route}) => {
+        <Stack.Navigator screenOptions={({ route }) => {
             // console.log(route)
-            return { headerShown: false}
+            return { headerShown: false }
         }}>
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Search" component={SearchForm} />
-            <Stack.Screen name="FormStack" component={FormStack} />
+                <Stack.Screen name="Search" component={SearchForm} />
+                <Stack.Screen name="FormStack" component={FormStack} />
         </Stack.Navigator>
     )
 }

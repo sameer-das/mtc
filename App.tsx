@@ -11,6 +11,7 @@ import AppStack from './src/AppStackScreens/AppStack';
 import AuthStack from './src/AuthStackScreens/AuthStack';
 import { LightScheme } from './theme/light';
 import { DarkScheme } from './theme/dark';
+import { PropertyProvider } from './src/contexts/PropertyContext';
 
 const lightTheme = {
   ...MD3LightTheme,
@@ -60,7 +61,9 @@ function AppContent() {
       ...styles.container,
     }}>
       <NavigationContainer>
-        {user ? <AppStack /> : <AuthStack />}
+        {user ? <PropertyProvider>
+          <AppStack />
+        </PropertyProvider> : <AuthStack />}
       </NavigationContainer>
     </View>
   );
