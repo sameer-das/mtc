@@ -20,6 +20,8 @@ interface PropertyAddressType {
   ownerAddressDistrict: string,
   ownerAddressCity: string,
   ownerAddressPin: string,
+  latitude: number | null,
+  longitude: number | null,
 }
 
 const validationSchema = Yup.object().shape({
@@ -45,14 +47,15 @@ const Address = () => {
     ownerAddressDistrict: '',
     ownerAddressCity: '',
     ownerAddressPin: '',
+    latitude: null,
+    longitude: null,
   });
 
   const theme = useTheme();
   const safeAreaInsets = useSafeAreaInsets();
 
   const [loading, setLoading] = useState(false)
-  const [latitude, setLatitude] = useState<number | null>(46565)
-  const [longitude, setLongitude] = useState<number | null>(45646)
+  const [isLocationFetching, setIsLocationFetching] = useState(false)
 
   const requestLocationPermission = async () => {
     try {
@@ -73,34 +76,6 @@ const Address = () => {
     }
   };
 
-  const getCurrentLocation = async () => {
-    console.log('getCurrentLocation')
-    const hasPermission = await requestLocationPermission();
-    if (!hasPermission) {
-      console.log('Location permission denied');
-      return;
-    }
-    console.log('getCurrentLocation ' + hasPermission);
-    setLoading(true)
-    Geolocation.getCurrentPosition(
-      (position) => {
-        console.log(position)
-
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.latitude)
-
-
-        setLoading(false)
-        // setError(null);
-      },
-      (err) => {
-        // setError(err.message);
-        setLoading(false)
-        console.error(err);
-      },
-      { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
-    );
-  };
 
 
   return (
@@ -109,9 +84,35 @@ const Address = () => {
       <Formik initialValues={initialValues} enableReinitialize={true} validationSchema={validationSchema} onSubmit={(values) => console.log(values)}>
         {
           ({ values, errors, handleSubmit, setFieldValue, handleChange, isValid }) => {
+
+            const getCurrentLocation = async () => {
+              console.log('getCurrentLocation')
+              const hasPermission = await requestLocationPermission();
+              if (!hasPermission) {
+                console.log('Location permission denied');
+                return;
+              }
+              console.log('getCurrentLocation ' + hasPermission);
+              setIsLocationFetching(true)
+              Geolocation.getCurrentPosition(
+                (position) => {
+                  console.log(position)
+                  setIsLocationFetching(false)
+                  setFieldValue('latitude', String(position.coords.latitude));
+                  setFieldValue('longitude', String(position.coords.longitude));
+                },
+                (err) => {
+                  // setError(err.message);
+                  setIsLocationFetching(false)
+                  console.error(err);
+                },
+                { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
+              );
+            };
+
             return (<View style={{ display: 'flex', marginBottom: safeAreaInsets.bottom + 80 }}>
               <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8, }}>Address of the Property</Text>
-              <View style={{marginBottom: 8}}>
+              <View style={{ marginBottom: 8 }}>
                 <Input label='Address' value={values.propertyAddress} onChangeText={handleChange('propertyAddress')} />
               </View>
 
@@ -161,7 +162,7 @@ const Address = () => {
 
 
               <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8 }}>Correspondence address of the owner</Text>
-              <View style={{marginBottom: 8}}>
+              <View style={{ marginBottom: 8 }}>
                 <Input label='Address' disabled={values.isOwnerAddressSame} value={values.ownerAddress} onChangeText={handleChange('ownerAddress')} />
               </View>
 
@@ -191,19 +192,23 @@ const Address = () => {
                 </View>
               </View>
 
-              {/* <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8 }}>Current location of property</Text>
+              <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8 }}>Current location of property</Text>
 
               <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
                 <View style={{ flex: 1 }}>
-                  <Input label='Latitude'  value={latitude} onChangeText={(e) => setLatitude(e)} />
+                  <Input label='Latitude' disabled value={values.latitude} onChangeText={handleChange('latitude')} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Input label='Longitude'  value={longitude} onChangeText={(e) => setLongitude(e)} />
+                  <Input label='Longitude' disabled value={values.longitude} onChangeText={handleChange('longitude')} />
                 </View>
-              </View> 
-              <View >
-                <Button mode='outlined' style={{ height: 40 }} icon={() => <Icon name='map-marker' color={theme.colors.primary} size={20} />} onPress={getCurrentLocation}>Get Current Location</Button>
-              </View> */}
+              </View>
+
+              <View style={{ marginTop: 16 }}>
+                <Button mode='outlined' style={{ height: 40 }}
+                  icon={() => <Icon name='map-marker' color={theme.colors.primary} size={20} />}
+                  loading={isLocationFetching}
+                  onPress={getCurrentLocation}>Get Current Location</Button>
+              </View>
 
               <Button style={{ marginTop: 12 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Property Address</Button>
 

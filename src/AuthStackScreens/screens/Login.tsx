@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
 import { loginUser } from '../../API/service'
@@ -25,6 +25,7 @@ const Login = () => {
       }
     } catch (e) {
       console.log(e)
+      Alert.alert('Error', JSON.stringify(e))
     }
   }
 
