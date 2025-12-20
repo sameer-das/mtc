@@ -22,6 +22,10 @@ interface PropertyAddressType {
   ownerAddressPin: string,
   latitude: number | null,
   longitude: number | null,
+  attribute0: string | null,
+  attribute1: string | null,
+  widthOfRoad?: string | null;
+  areaOfPlot?: string | null;
 }
 
 const validationSchema = Yup.object().shape({
@@ -49,6 +53,10 @@ const Address = () => {
     ownerAddressPin: '',
     latitude: null,
     longitude: null,
+    attribute0: '',
+    attribute1: '',
+    widthOfRoad: '',
+    areaOfPlot: ''
   });
 
   const theme = useTheme();
@@ -110,110 +118,130 @@ const Address = () => {
               );
             };
 
-            return (<View style={{ display: 'flex', marginBottom: safeAreaInsets.bottom + 80 }}>
-              <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8, }}>Address of the Property</Text>
-              <View style={{ marginBottom: 8 }}>
-                <Input label='Address' value={values.propertyAddress} onChangeText={handleChange('propertyAddress')} />
-              </View>
-
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
-                <View style={{ flex: 1 }}>
-                  <Input label='District' value={values.propertyAddressDistrict} onChangeText={handleChange('propertyAddressDistrict')} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Input label='City' value={values.propertyAddressCity} onChangeText={handleChange('propertyAddressCity')} />
+            return (
+              <View style={{ display: 'flex', marginBottom: safeAreaInsets.bottom + 80 }}>
+                <Text variant="titleSmall" style={{ textAlign: 'center', marginVertical: 8, textDecorationLine:'underline' }}>Address of the Property</Text>
+                <View style={{ marginBottom: 8 }}>
+                  <Input label='Address' value={values.propertyAddress} onChangeText={handleChange('propertyAddress')} />
                 </View>
 
-                <View style={{ width: '25%' }}>
-                  <Input label='Pin' value={values.propertyAddressPin} onChangeText={handleChange('propertyAddressPin')} />
-                </View>
-              </View>
-              {/* For Errors */}
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4, marginBottom: 8 }}>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.propertyAddressDistrict ? errors.propertyAddressDistrict : ''} </Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.propertyAddressCity ? errors.propertyAddressCity : ''} </Text>
-                </View>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
+                  <View style={{ flex: 1 }}>
+                    <Input label='District' value={values.propertyAddressDistrict} onChangeText={handleChange('propertyAddressDistrict')} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Input label='City' value={values.propertyAddressCity} onChangeText={handleChange('propertyAddressCity')} />
+                  </View>
 
-                <View style={{ width: '25%' }}>
-                  <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.propertyAddressPin ? errors.propertyAddressPin : ''} </Text>
+                  <View style={{ width: '25%' }}>
+                    <Input label='Pin' value={values.propertyAddressPin} onChangeText={handleChange('propertyAddressPin')} />
+                  </View>
                 </View>
-              </View>
+                {/* For Errors */}
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4, marginBottom: 8 }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.propertyAddressDistrict ? errors.propertyAddressDistrict : ''} </Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.propertyAddressCity ? errors.propertyAddressCity : ''} </Text>
+                  </View>
 
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8 }}>
-                <Text variant='labelMedium' style={{ color: theme.colors.primary }}>Owner's Address is as same as property address</Text>
-                <Switch value={values.isOwnerAddressSame} onValueChange={(same) => {
-                  setFieldValue('isOwnerAddressSame', same);
-                  if (same) {
-                    setFieldValue('ownerAddress', values.propertyAddress)
-                    setFieldValue('ownerAddressDistrict', values.propertyAddressDistrict)
-                    setFieldValue('ownerAddressCity', values.propertyAddressCity)
-                    setFieldValue('ownerAddressPin', values.propertyAddressPin)
-                  } else {
-                    setFieldValue('ownerAddress', '')
-                    setFieldValue('ownerAddressDistrict', '')
-                    setFieldValue('ownerAddressCity', '')
-                    setFieldValue('ownerAddressPin', '')
-                  }
-                }} />
-              </View>
-
-
-              <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8 }}>Correspondence address of the owner</Text>
-              <View style={{ marginBottom: 8 }}>
-                <Input label='Address' disabled={values.isOwnerAddressSame} value={values.ownerAddress} onChangeText={handleChange('ownerAddress')} />
-              </View>
-
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
-                <View style={{ flex: 1 }}>
-                  <Input label='District' disabled={values.isOwnerAddressSame} value={values.ownerAddressDistrict} onChangeText={handleChange('ownerAddressDistrict')} />
+                  <View style={{ width: '25%' }}>
+                    <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.propertyAddressPin ? errors.propertyAddressPin : ''} </Text>
+                  </View>
                 </View>
-                <View style={{ flex: 1 }}>
-                  <Input label='City' disabled={values.isOwnerAddressSame} value={values.ownerAddressCity} onChangeText={handleChange('ownerAddressCity')} />
+                <View style={{ display: 'flex', gap: 8 }}>
+                  <View>
+                    <Input label='Landmark' value={values.attribute1} onChangeText={handleChange('attribute1')} />
+                  </View>
+                  <View>
+                    <Input label='House No./Building No.' value={values.attribute0} onChangeText={handleChange('attribute0')} />
+                  </View>
                 </View>
 
-                <View style={{ width: '25%' }}>
-                  <Input label='Pin' disabled={values.isOwnerAddressSame} value={values.ownerAddressPin} onChangeText={handleChange('ownerAddressPin')} />
+
+
+
+
+                <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 14, textDecorationLine:'underline' }}>Correspondence address of the owner</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 4 }}>
+                  <Text variant='labelMedium' style={{ color: theme.colors.primary, marginBottom: 6 }}>Owner's Address is as same as property address</Text>
+                  <Switch value={values.isOwnerAddressSame} onValueChange={(same) => {
+                    setFieldValue('isOwnerAddressSame', same);
+                    if (same) {
+                      setFieldValue('ownerAddress', values.propertyAddress)
+                      setFieldValue('ownerAddressDistrict', values.propertyAddressDistrict)
+                      setFieldValue('ownerAddressCity', values.propertyAddressCity)
+                      setFieldValue('ownerAddressPin', values.propertyAddressPin)
+                    } else {
+                      setFieldValue('ownerAddress', '')
+                      setFieldValue('ownerAddressDistrict', '')
+                      setFieldValue('ownerAddressCity', '')
+                      setFieldValue('ownerAddressPin', '')
+                    }
+                  }} />
                 </View>
-              </View>
-              {/* For Errors */}
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.ownerAddressDistrict ? errors.ownerAddressDistrict : ''} </Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.ownerAddressCity ? errors.ownerAddressCity : ''} </Text>
+                <View style={{ marginBottom: 8 }}>
+                  <Input label='Address' disabled={values.isOwnerAddressSame} value={values.ownerAddress} onChangeText={handleChange('ownerAddress')} />
                 </View>
 
-                <View style={{ width: '25%' }}>
-                  <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.ownerAddressPin ? errors.ownerAddressPin : ''} </Text>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
+                  <View style={{ flex: 1 }}>
+                    <Input label='District' disabled={values.isOwnerAddressSame} value={values.ownerAddressDistrict} onChangeText={handleChange('ownerAddressDistrict')} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Input label='City' disabled={values.isOwnerAddressSame} value={values.ownerAddressCity} onChangeText={handleChange('ownerAddressCity')} />
+                  </View>
+
+                  <View style={{ width: '25%' }}>
+                    <Input label='Pin' disabled={values.isOwnerAddressSame} value={values.ownerAddressPin} onChangeText={handleChange('ownerAddressPin')} />
+                  </View>
                 </View>
-              </View>
+                {/* For Errors */}
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.ownerAddressDistrict ? errors.ownerAddressDistrict : ''} </Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.ownerAddressCity ? errors.ownerAddressCity : ''} </Text>
+                  </View>
 
-              <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8 }}>Current location of property</Text>
-
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
-                <View style={{ flex: 1 }}>
-                  <Input label='Latitude' disabled value={values.latitude} onChangeText={handleChange('latitude')} />
+                  <View style={{ width: '25%' }}>
+                    <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.ownerAddressPin ? errors.ownerAddressPin : ''} </Text>
+                  </View>
                 </View>
-                <View style={{ flex: 1 }}>
-                  <Input label='Longitude' disabled value={values.longitude} onChangeText={handleChange('longitude')} />
+
+                <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8 }}>Current location of property</Text>
+
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
+                  <View style={{ flex: 1 }}>
+                    <Input label='Latitude' disabled value={values.latitude} onChangeText={handleChange('latitude')} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Input label='Longitude' disabled value={values.longitude} onChangeText={handleChange('longitude')} />
+                  </View>
                 </View>
-              </View>
 
-              <View style={{ marginTop: 16 }}>
-                <Button mode='outlined' style={{ height: 40 }}
-                  icon={() => <Icon name='map-marker' color={theme.colors.primary} size={20} />}
-                  loading={isLocationFetching}
-                  onPress={getCurrentLocation}>Get Current Location</Button>
-              </View>
+                <View style={{ marginTop: 16 }}>
+                  <Button mode='outlined' style={{ height: 40 }}
+                    icon={() => <Icon name='map-marker' color={theme.colors.primary} size={20} />}
+                    loading={isLocationFetching}
+                    onPress={getCurrentLocation}>Get Current Location</Button>
+                </View>
 
-              <Button style={{ marginTop: 12 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Property Address</Button>
+                <View style={{marginTop: 8, display:'flex', gap: 6}}>
+                  <View style={{ flex: 1 }}>
+                    <Input label='Width of the Road sorrounding' value={values.widthOfRoad} onChangeText={handleChange('widthOfRoad')} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Input label='Area of the plot (Sq. Ft.)' value={values.areaOfPlot} onChangeText={handleChange('areaOfPlot')} />
+                  </View>
+                </View>
+
+                <Button style={{ marginTop: 12 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Property Address</Button>
 
 
-            </View>)
+              </View>)
           }
         }
       </Formik>

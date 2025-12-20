@@ -3,7 +3,7 @@ export interface LoginData {
     password: string;
 }
 
-export type SelectType = { label: string; value: string };
+export type SelectType = { label: string; value: string | number };
 
 export interface PropertyMaster {
     propertyId?: number;

@@ -20,7 +20,7 @@ const SearchForm = ({ navigation }) => {
             console.log(resp)
             if (resp.data.code === 200 && resp.data.status === 'Success') {
                 setProperty(resp.data.data);
-                navigation.push('FormStack');
+                navigation.push('PropertyMenu');
             } else if (resp.data.code === 404) {
                 Alert.alert('Message', resp.data.data)
             } else {

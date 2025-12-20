@@ -10,6 +10,7 @@ import { AuthContext } from '../../contexts/AuthContext'
 import Details from './property-detail-form/Details'
 import Address from './property-detail-form/Address'
 import Document from './property-detail-form/Document'
+import PopertyNumberBanner from './PopertyNumberBanner'
 // import Geolocation from 'react-native-geolocation-service';
 
 interface ButtonType { value: string; label: string }
@@ -121,6 +122,7 @@ const PropertyDetailsForm = () => {
 
   return (
     <KeyboardAvoidingView behavior="height" style={{ ...styles.container, backgroundColor: theme.colors.background }}>
+      <PopertyNumberBanner />
       <Text variant="titleMedium" style={{ textAlign: 'center', marginVertical: 8 }}>Property Details</Text>
       <SegmentedButtons style={{ marginVertical: 8 }} value={segmentedButtonValue}
         onValueChange={setSegmentedButtonValue}

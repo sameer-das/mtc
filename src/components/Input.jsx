@@ -17,6 +17,7 @@ const Input = (props) => {
                 fontSize: 16,
                 height: 50
             }}
+
         />
         </View>
         

@@ -12,6 +12,7 @@ import { AuthContext } from '../../contexts/AuthContext'
 import { PropertyContext } from '../../contexts/PropertyContext'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import PopertyNumberBanner from './PopertyNumberBanner'
 
 
 interface OwnerDetailType {
@@ -109,10 +110,10 @@ const OwnerDetailsForm = () => {
         const payload: PropertyMaster = {
             householdNo: 'AAAAAAA',
             ownerName: values.ownerName,
-            salutaion: values.salutation.value,
-            careOf: values.careOf.value,
-            guardianName: values.guardianName,
-            gender: values.gender.value,
+            salutaion: values.salutation.value as string,
+            careOf: values.careOf.value as string,
+            guardianName: values.guardianName ,
+            gender: values.gender.value as string,
             dob: getDate(values.dob.toISOString()),
             mobile: values.mobile,
             updatedBy: user.username
@@ -138,6 +139,7 @@ const OwnerDetailsForm = () => {
     return (
         <KeyboardAvoidingView behavior="height" style={{ ...styles.container, backgroundColor: theme.colors.background }}>
             <Loading visible={loading} />
+            <PopertyNumberBanner />
 
             <Text variant="titleMedium" style={{ textAlign: 'center', marginVertical: 8 }}>Owner Details</Text>
 
@@ -204,7 +206,7 @@ const OwnerDetailsForm = () => {
                                 <View style={{ flex: 1 }}>
                                     <Text style={{ color: theme.colors.error, fontSize: 12 }}>{errors.mobile ? errors.mobile : null}</Text>
                                 </View>
-                            </View>
+                            </View>                            
                             <Button style={{ marginTop: 8 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Owner Detail</Button>
                             {/* <Text>{JSON.stringify(errors.dob)}</Text> */}
                         </View>)

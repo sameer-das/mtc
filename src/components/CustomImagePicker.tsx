@@ -12,7 +12,8 @@ interface ImagePickerProps {
     label: string,
     cropperCircleOverlay?: boolean,
     useFrontCamera?: boolean,
-    compressImageQuality?: number
+    compressImageQuality?: number,
+    
 }
 const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleOverlay, useFrontCamera, compressImageQuality }: ImagePickerProps) => {
     const theme = useTheme()
@@ -75,9 +76,9 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
 
     return (
         <>
-            <View style={styles.imageUploadSection}>
+            <View style={{}}>
                 <Text style={styles.imageLabel}>{label}</Text>
-                <Pressable style={[styles.adharFrontPicContainer, styles.centerText, {borderColor: theme.colors.onSurface}]} onPress={showModal}>
+                <Pressable style={[{height: value ? 100 : 50}, styles.border, styles.centerText, {borderColor: theme.colors.onSurface}]} onPress={showModal}>
                     {!value && <Text style={styles.uploadText}>{placeholder}</Text>}
                     {value && <Image source={{ uri: value }} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />}
                 </Pressable>
@@ -155,9 +156,7 @@ const modal = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-    imageUploadSection: { marginBottom: 20 },
-    adharFrontPicContainer: {
-        height: 180,
+    border: {        
         borderWidth: 1,
         borderRadius: 8
     },
@@ -174,11 +173,9 @@ const styles = StyleSheet.create({
         marginBottom: 4
     },
     imageBottomControlContainer: {
-        marginTop: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 36, // constant height 
     },
     uploadAgainText: {
         fontSize: 16,
