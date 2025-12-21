@@ -75,9 +75,9 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
 
 
     return (
-        <>
-            <View style={{}}>
-                <Text style={styles.imageLabel}>{label}</Text>
+        <View style={{}}>
+            <View >
+                <Text variant='labelSmall' style={[{color: theme.colors.primary}]}>{label}</Text>
                 <Pressable style={[{height: value ? 100 : 50}, styles.border, styles.centerText, {borderColor: theme.colors.onSurface}]} onPress={showModal}>
                     {!value && <Text style={styles.uploadText}>{placeholder}</Text>}
                     {value && <Image source={{ uri: value }} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />}
@@ -114,7 +114,7 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
                 </Modal>
             </Portal>
 
-        </>
+        </View>
     )
 }
 
@@ -158,7 +158,7 @@ const modal = StyleSheet.create({
 const styles = StyleSheet.create({
     border: {        
         borderWidth: 1,
-        borderRadius: 8
+        borderRadius: 4
     },
     centerText: {
         justifyContent: 'center',
@@ -166,11 +166,6 @@ const styles = StyleSheet.create({
     },
     uploadText: {
         fontSize: 16,
-    },
-    imageLabel: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 4
     },
     imageBottomControlContainer: {
         flexDirection: 'row',

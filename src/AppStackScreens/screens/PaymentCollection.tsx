@@ -10,10 +10,12 @@ import PopertyNumberBanner from './PopertyNumberBanner'
 import CustomImagePicker from '../../components/CustomImagePicker'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import Geolocation from '@react-native-community/geolocation'
+import { useNavigation } from '@react-navigation/native'
 
 const PaymentCollection = () => {
   const { property } = useContext(PropertyContext)
-  const theme = useTheme()
+  const theme = useTheme();
+  const navigation = useNavigation()
   const [remarkOptions, setRemarkOptions] = useState<SelectType[]>([
     { label: 'Full Amount Received', value: 1 },
     { label: 'Partial Amount Received', value: 2 },
@@ -153,8 +155,8 @@ const PaymentCollection = () => {
       </View>
 
       <View style={{ marginTop: 6, paddingTop: 6, flexDirection: 'row', gap: 6, borderTopColor: theme.colors.primary, borderTopWidth: 2 }}>
-        <Text style={{ flex: 1, }}>Total</Text>
-        <Text style={{ flex: 1, textAlign: 'right' }}>1500.00</Text>
+        <Text variant="titleMedium" style={{ flex: 1, color: theme.colors.primary }}>Total</Text>
+        <Text variant="titleMedium" style={{ flex: 1, textAlign: 'right', color: theme.colors.primary }}>1500.00</Text>
       </View>
 
       <View style={{ marginTop: 40, gap: 12 }}>
@@ -168,7 +170,7 @@ const PaymentCollection = () => {
       </View>
 
       <View style={{ marginTop: 12 }}>
-        <CustomImagePicker label='Choose your visit photo' value={image} setValue={(v: string) => setImage(v)} placeholder='Tap to upload image of the property' />
+        {/* <CustomImagePicker label='Choose your visit photo' value={image} setValue={(v: string) => setImage(v)} placeholder='Tap to upload image of the property' /> */}
       </View>
       <View style={{ marginTop: 12 }}>
         <Button mode='outlined' style={{ height: 40 }}
@@ -182,7 +184,7 @@ const PaymentCollection = () => {
 
       <View style={{ flexDirection: 'row', gap: 6, marginTop: 30, marginBottom: 80 }}>
         <Button style={{ marginTop: 12, flex: 1 }} mode='contained'>Update</Button>
-        <Button style={{ marginTop: 12, flex: 1 }} mode='outlined'>Back</Button>
+        <Button style={{ marginTop: 12, flex: 1 }} mode='outlined' onPress={() => navigation.goBack()}>Back</Button>
       </View>
 
     </ScrollView>

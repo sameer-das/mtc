@@ -47,7 +47,7 @@ const SearchForm = ({ navigation }) => {
             <View style={{ ...styles.formArea }}>
                 <Input value={householdNo}
                     label="PIN/House Hold No"
-                    onChangeText={(nextValue) => setHouseholdNo(nextValue)} />
+                    onChangeText={(nextValue) => setHouseholdNo(nextValue.toUpperCase())} />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 8 }}>
                     <Button disabled={isLoading || !householdNo} style={{ width: '40%' }} mode='contained' onPress={handleSearch}>Search</Button>
                     <Button style={{ width: '40%' }} mode='outlined' onPress={handleClear}>Clear</Button>

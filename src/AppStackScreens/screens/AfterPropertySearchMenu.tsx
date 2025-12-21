@@ -44,13 +44,13 @@ const AfterPropertySearchMenu = ({ navigation }) => {
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Mobile</Text>
                 <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.mobile || 'Not Updated'}</Text>
-                </View>
-                <View style={{ display: 'flex', gap: 12, marginTop: 40 }}>
+            </View>
+            
+            <View style={{ display: 'flex', gap: 12, marginTop: 40 }}>
                 <Button mode="contained" onPress={() => { navigation.push('FormStack') }}>View/Update Details</Button>
                 <Button mode="contained" onPress={() => { navigation.push('AadharAndPan') }}>Update Aadhar/Pan Details</Button>
                 <Button mode="contained" onPress={() => { navigation.push('DemandGeneration') }}>Generate Demand</Button>
-                <Button mode="contained" onPress={() => { navigation.push('PaymentCollection') }}>Payment Collecion</Button>
-                <Button mode="contained" onPress={() => { }}>Add Remarks</Button>
+                <Button mode="contained" onPress={() => { navigation.push('PaymentCollection') }}>Payment Collection</Button>
             </View>
             <View style={{ marginTop: 12 }}>
                 {/* <Button mode="outlined" onPress={() => { navigation.replace('Search') }}>Search another property</Button> */}
