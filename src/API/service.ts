@@ -107,3 +107,13 @@ export const getPropertyMasterDetail = async (pin: string) => {
 export const getOwnerDetails = async (ownerId: number) => {
     return apiClient.get(`/Master/ownerDetails?ownerId=${ownerId}`)
 }
+
+export const getZoneList = async (pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/zoneList`, {params: {pageNumber, pageSize}})
+    // ?pageNumber=${pageNumber}&pageSize=${pageSize}
+}
+
+export const getWardList = async (zoneId: number, pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/wardList`, {params: {zoneId, pageNumber, pageSize}})
+    // ?pageNumber=${pageNumber}&pageSize=${pageSize}
+}

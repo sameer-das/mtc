@@ -5,7 +5,8 @@ import { useTheme } from 'react-native-paper';
 
 const PopertyNumberBanner = () => {
   const {property} = useContext(PropertyContext);
-  const theme = useTheme()
+  const theme = useTheme();
+  console.log(property)
   return (
     <View>
       <Text style={{textAlign: 'right', color: theme.colors.primary}}>PIN: {property?.householdNo }</Text>

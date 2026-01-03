@@ -137,7 +137,7 @@ const PaymentCollection = () => {
   };
 
   return (
-    <ScrollView style={[styles.container]}>
+    <ScrollView style={[styles.container, {backgroundColor: theme.colors.background}]}>
       <PopertyNumberBanner />
       <Text variant='headlineSmall' style={{ textAlign: 'center', marginBottom: 12 }}>Collection</Text>
       {/* <View style={{flexDirection:'row', gap: 6}}>

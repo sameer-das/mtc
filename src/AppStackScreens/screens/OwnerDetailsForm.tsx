@@ -108,7 +108,7 @@ const OwnerDetailsForm = () => {
     const handleUpdateOwner = async (values: OwnerDetailType) => {
 
         const payload: PropertyMaster = {
-            householdNo: 'AAAAAAA',
+            householdNo: property?.householdNo,
             ownerName: values.ownerName,
             salutaion: values.salutation.value as string,
             careOf: values.careOf.value as string,

@@ -11,6 +11,7 @@ import AfterPropertySearchMenu from './AfterPropertySearchMenu';
 import AadharAndPan from './AadharAndPan';
 import PaymentCollection from './PaymentCollection';
 import DemandGeneration from './DemandGeneration';
+import AddFloorData from './property-detail-form/AddFloorData';
 
 const Stack = createNativeStackNavigator();
 const TopTabs = createMaterialTopTabNavigator();
@@ -29,6 +30,15 @@ const FormStack = () => {
     )
 }
 
+const UpdateDetailsStack = () => {
+    return (<Stack.Navigator screenOptions={({ route }) => {
+            return { headerShown: false }
+        }}>
+            <Stack.Screen name='mainform' component={FormStack} />
+            <Stack.Screen name='addFloorData' component={AddFloorData} />
+        </Stack.Navigator>)
+}
+
 
 
 const HomeStack = () => {
@@ -37,12 +47,12 @@ const HomeStack = () => {
             return { headerShown: false }
         }}>
             <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Search" component={SearchForm} />
-                <Stack.Screen name="PropertyMenu" component={AfterPropertySearchMenu}/>
-                <Stack.Screen name="FormStack" component={FormStack} />
-                <Stack.Screen name="AadharAndPan" component={AadharAndPan} />
-                <Stack.Screen name="PaymentCollection" component={PaymentCollection} />
-                <Stack.Screen name="DemandGeneration" component={DemandGeneration} />
+            <Stack.Screen name="Search" component={SearchForm} />
+            <Stack.Screen name="PropertyMenu" component={AfterPropertySearchMenu}/>
+            <Stack.Screen name="UpdateDetailsStack" component={UpdateDetailsStack} />
+            <Stack.Screen name="AadharAndPan" component={AadharAndPan} />
+            <Stack.Screen name="PaymentCollection" component={PaymentCollection} />
+            <Stack.Screen name="DemandGeneration" component={DemandGeneration} />
         </Stack.Navigator>
     )
 }

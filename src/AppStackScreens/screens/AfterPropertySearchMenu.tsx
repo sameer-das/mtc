@@ -47,7 +47,7 @@ const AfterPropertySearchMenu = ({ navigation }) => {
             </View>
             
             <View style={{ display: 'flex', gap: 12, marginTop: 40 }}>
-                <Button mode="contained" onPress={() => { navigation.push('FormStack') }}>View/Update Details</Button>
+                <Button mode="contained" onPress={() => { navigation.push('UpdateDetailsStack') }}>View/Update Details</Button>
                 <Button mode="contained" onPress={() => { navigation.push('AadharAndPan') }}>Update Aadhar/Pan Details</Button>
                 <Button mode="contained" onPress={() => { navigation.push('DemandGeneration') }}>Generate Demand</Button>
                 <Button mode="contained" onPress={() => { navigation.push('PaymentCollection') }}>Payment Collection</Button>

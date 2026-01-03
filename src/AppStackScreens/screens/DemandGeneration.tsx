@@ -20,7 +20,7 @@ const DemandGeneration = () => {
   const [financialYear, setFinancialYear] = useState<SelectType>();
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme.colors.background}}>
       <PopertyNumberBanner />
       <Text variant='headlineSmall' style={{ textAlign: 'center', marginBottom: 12 }}>Demand Generation</Text>
       <View>

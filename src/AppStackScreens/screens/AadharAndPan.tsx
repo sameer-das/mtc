@@ -40,7 +40,7 @@ const AadharAndPan = () => {
 
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: theme.colors.background}}>
             <PopertyNumberBanner />
             <Text variant="titleMedium" style={{ textAlign: 'center', marginVertical: 8 }}>Update Aadhar and PAN</Text>
             <Formik enableReinitialize={true} initialValues={initialValue} onSubmit={handleUpdateAadharPan} validationSchema={aadharPanValidationSchema} >

@@ -20,10 +20,10 @@ interface PropertyAddressType {
   ownerAddressDistrict: string,
   ownerAddressCity: string,
   ownerAddressPin: string,
-  latitude: number | null,
-  longitude: number | null,
   attribute0: string | null,
   attribute1: string | null,
+  attribute2: string | null,
+  attribute3: string | null,
   widthOfRoad?: string | null;
   areaOfPlot?: string | null;
 }
@@ -51,13 +51,16 @@ const Address = () => {
     ownerAddressDistrict: '',
     ownerAddressCity: '',
     ownerAddressPin: '',
-    latitude: null,
-    longitude: null,
-    attribute0: '',
-    attribute1: '',
+    attribute0: '', // property house/buildig no
+    attribute1: '', // propert landmark
+    attribute2: '', //owner address house/building no
+    attribute3: '', // owner address land mark
     widthOfRoad: '',
     areaOfPlot: ''
   });
+
+  const [longitude, setLongitude] = useState('');
+  const [latitude, setLatitude] = useState('');
 
   const theme = useTheme();
   const safeAreaInsets = useSafeAreaInsets();
@@ -106,8 +109,8 @@ const Address = () => {
                 (position) => {
                   console.log(position)
                   setIsLocationFetching(false)
-                  setFieldValue('latitude', String(position.coords.latitude));
-                  setFieldValue('longitude', String(position.coords.longitude));
+                  setLatitude(String(position.coords.latitude));
+                  setLongitude(String(position.coords.longitude));
                 },
                 (err) => {
                   // setError(err.message);
@@ -120,9 +123,9 @@ const Address = () => {
 
             return (
               <View style={{ display: 'flex', marginBottom: safeAreaInsets.bottom + 80 }}>
-                <Text variant="titleSmall" style={{ textAlign: 'center', marginVertical: 8, textDecorationLine:'underline' }}>Address of the Property</Text>
+                <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 20, textDecorationLine: 'underline' }}>Address of the Property</Text>
                 <View style={{ marginBottom: 8 }}>
-                  <Input label='Address' value={values.propertyAddress} onChangeText={handleChange('propertyAddress')} />
+                  <Input label='Address of Propery' value={values.propertyAddress} onChangeText={handleChange('propertyAddress')} />
                 </View>
 
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
@@ -152,10 +155,10 @@ const Address = () => {
                 </View>
                 <View style={{ display: 'flex', gap: 8 }}>
                   <View>
-                    <Input label='Landmark' value={values.attribute1} onChangeText={handleChange('attribute1')} />
+                    <Input label='House No./Building No. of Property' value={values.attribute0} onChangeText={handleChange('attribute0')} />
                   </View>
                   <View>
-                    <Input label='House No./Building No.' value={values.attribute0} onChangeText={handleChange('attribute0')} />
+                    <Input label='Landmark of Property' value={values.attribute1} onChangeText={handleChange('attribute1')} />
                   </View>
                 </View>
 
@@ -163,7 +166,7 @@ const Address = () => {
 
 
 
-                <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 14, textDecorationLine:'underline' }}>Correspondence address of the owner</Text>
+                <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 32, textDecorationLine: 'underline' }}>Correspondence address of the owner</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 4 }}>
                   <Text variant='labelMedium' style={{ color: theme.colors.primary, marginBottom: 6 }}>Owner's Address is as same as property address</Text>
                   <Switch value={values.isOwnerAddressSame} onValueChange={(same) => {
@@ -173,16 +176,20 @@ const Address = () => {
                       setFieldValue('ownerAddressDistrict', values.propertyAddressDistrict)
                       setFieldValue('ownerAddressCity', values.propertyAddressCity)
                       setFieldValue('ownerAddressPin', values.propertyAddressPin)
+                      setFieldValue('attribute2', values.attribute0)
+                      setFieldValue('attribute3', values.attribute1)
                     } else {
                       setFieldValue('ownerAddress', '')
                       setFieldValue('ownerAddressDistrict', '')
                       setFieldValue('ownerAddressCity', '')
                       setFieldValue('ownerAddressPin', '')
+                      setFieldValue('attribute2', '')
+                      setFieldValue('attribute3', '')
                     }
                   }} />
                 </View>
                 <View style={{ marginBottom: 8 }}>
-                  <Input label='Address' disabled={values.isOwnerAddressSame} value={values.ownerAddress} onChangeText={handleChange('ownerAddress')} />
+                  <Input label='Address of the Owner' disabled={values.isOwnerAddressSame} value={values.ownerAddress} onChangeText={handleChange('ownerAddress')} />
                 </View>
 
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
@@ -210,35 +217,48 @@ const Address = () => {
                     <Text style={{ color: theme.colors.error, fontSize: 12 }}> {errors.ownerAddressPin ? errors.ownerAddressPin : ''} </Text>
                   </View>
                 </View>
-
-                <Text variant="titleSmall" style={{ textAlign: 'left', marginVertical: 8 }}>Current location of property</Text>
-
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
-                  <View style={{ flex: 1 }}>
-                    <Input label='Latitude' disabled value={values.latitude} onChangeText={handleChange('latitude')} />
+                <View style={{ display: 'flex', gap: 8 }}>
+                  <View>
+                    <Input label='House No./Building No. of the Owner' disabled={values.isOwnerAddressSame} value={values.attribute2} onChangeText={handleChange('attribute2')} />
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <Input label='Longitude' disabled value={values.longitude} onChangeText={handleChange('longitude')} />
+                  <View>
+                    <Input label='Landmark of the Owner' disabled={values.isOwnerAddressSame} value={values.attribute3} onChangeText={handleChange('attribute3')} />
                   </View>
+
                 </View>
 
+
+
+
+
+
+                <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 32, textDecorationLine: 'underline' }}>Current location of property</Text>
                 <View style={{ marginTop: 16 }}>
                   <Button mode='outlined' style={{ height: 40 }}
                     icon={() => <Icon name='map-marker' color={theme.colors.primary} size={20} />}
                     loading={isLocationFetching}
                     onPress={getCurrentLocation}>Get Current Location</Button>
-                </View>
-
-                <View style={{marginTop: 8, display:'flex', gap: 6}}>
-                  <View style={{ flex: 1 }}>
-                    <Input label='Width of the Road sorrounding' value={values.widthOfRoad} onChangeText={handleChange('widthOfRoad')} />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Input label='Area of the plot (Sq. Ft.)' value={values.areaOfPlot} onChangeText={handleChange('areaOfPlot')} />
+                  <View>
+                    {(longitude || latitude) ? <Text style={{ fontSize: 12, textAlign: 'center' }}>Longitude: {longitude}, Latiude: {latitude}</Text> : <Text></Text>}
                   </View>
                 </View>
 
-                <Button style={{ marginTop: 12 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Property Address</Button>
+
+
+
+
+
+                <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 32, textDecorationLine: 'underline' }}>Land Related Data</Text>
+                <View style={{ marginTop: 8, display: 'flex', gap: 6 }}>
+                  <View style={{ flex: 1 }}>
+                    <Input label='Width of the Road sorrounding the property' value={values.widthOfRoad} onChangeText={handleChange('widthOfRoad')} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Input label='Area of the property/plot (Sq. Ft.)' value={values.areaOfPlot} onChangeText={handleChange('areaOfPlot')} />
+                  </View>
+                </View>
+
+                <Button style={{ marginTop: 20 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Address</Button>
 
 
               </View>)

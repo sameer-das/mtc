@@ -15,6 +15,9 @@ const Dropdown = (props) => {
         hideModal();
     }
 
+    // if(props.label === 'Zone')
+    //     console.log(props)
+
     return (
         <View style={{ display: 'flex', flexDirection: 'column' }}>
             <Text variant='labelSmall' style={{ color: theme.colors.primary }}>{props.label ? props.label : 'Select'}</Text>

@@ -13,13 +13,13 @@ const Document = () => {
     <ScrollView>
       <Text variant='titleSmall' style={{marginVertical: 12, textAlign: 'center', color: theme.colors.primary}}>Upload images from 4 sides of the property.</Text>
       <View style={{  }} >
-        <CustomImagePicker label='' value={image1} setValue={(v: string) => setImage1(v)} placeholder='Tap to upload image 1.' />
-        <CustomImagePicker label='' value={image2} setValue={(v: string) => setImage2(v)} placeholder='Tap to upload image 2.' />
-        <CustomImagePicker label='' value={image3} setValue={(v: string) => setImage3(v)} placeholder='Tap to upload image 3.' />
-        <CustomImagePicker label='' value={image4} setValue={(v: string) => setImage4(v)} placeholder='Tap to upload image 4.' />
+        <CustomImagePicker label='' value={image1} setValue={(v: string) => setImage1(v)} placeholder='Tap to choose image 1.' />
+        <CustomImagePicker label='' value={image2} setValue={(v: string) => setImage2(v)} placeholder='Tap to choose image 2.' />
+        <CustomImagePicker label='' value={image3} setValue={(v: string) => setImage3(v)} placeholder='Tap to choose image 3.' />
+        <CustomImagePicker label='' value={image4} setValue={(v: string) => setImage4(v)} placeholder='Tap to choose image 4.' />
 
       </View>
-      <Button style={{ marginTop: 8 , marginBottom: 80}} mode='contained' disabled={!image1 || !image2 || !image3 || !image4} onPress={() => console.log("Image uploaded")}>Update Property Image</Button>
+      <Button style={{ marginTop: 30 , marginBottom: 80}} mode='contained' disabled={!image1 || !image2 || !image3 || !image4} onPress={() => console.log("Image uploaded")}>Upload Images</Button>
 
     </ScrollView>
   )
