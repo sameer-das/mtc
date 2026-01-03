@@ -34,8 +34,8 @@ const UpdateDetailsStack = () => {
     return (<Stack.Navigator screenOptions={({ route }) => {
             return { headerShown: false }
         }}>
-            <Stack.Screen name='mainform' component={FormStack} />
-            <Stack.Screen name='addFloorData' component={AddFloorData} />
+            <Stack.Screen name='FormStack' component={FormStack} />
+            <Stack.Screen name='AddFloorData' component={AddFloorData} />
         </Stack.Navigator>)
 }
 

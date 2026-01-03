@@ -36,8 +36,10 @@ const AddFloorData = () => {
         <ScrollView style={{ flexGrow: 1, backgroundColor: theme.colors.background }}>
 
             <View style={{ ...styles.container, marginBottom: safeAreaInsets.bottom }}>
-                {/* <PopertyNumberBanner /> */}
-                <Text variant="titleSmall">Floor Data</Text>
+                <View style={{width: '100%'}}>
+                    <PopertyNumberBanner />
+                </View>
+                <Text variant="titleMedium">Update Floor Data</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                     <View style={{ flex: 1 }}>
                         <Input value={noOfFloor}

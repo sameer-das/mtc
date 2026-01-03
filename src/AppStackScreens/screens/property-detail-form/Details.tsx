@@ -247,7 +247,7 @@ const Details = () => {
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', }}>
                                     <Button style={{ flex: 1 }}
                                         mode='outlined'
-                                        onPress={() => navigation.push('addFloorData')}
+                                        onPress={() => navigation.push('AddFloorData')}
                                         icon={() => <Icon name='domain-plus' color={theme.colors.primary} size={20} />}> Add/View floor wise data</Button>
                                 </View>
                             </View>
