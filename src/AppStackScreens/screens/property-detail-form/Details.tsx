@@ -1,16 +1,18 @@
-import { StyleSheet, Text, ScrollView, View } from 'react-native'
+import { StyleSheet, Text, ScrollView, View, Alert } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Dropdown from '../../../components/Dropdown';
 import Input from '../../../components/Input';
-import { SelectType } from '../../../Models/models';
+import { PropertyMaster, SelectType } from '../../../Models/models';
 import { Button, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/material-design-icons';
 import { useNavigation } from '@react-navigation/native';
-import { getWardList, getZoneList } from '../../../API/service';
+import { getWardList, getZoneList, updatePropertyMaster } from '../../../API/service';
 import { PropertyContext } from '../../../contexts/PropertyContext';
+import Loading from '../../../components/Loading';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 interface PropertyDetailType {
     zone: SelectType | null,
@@ -18,18 +20,15 @@ interface PropertyDetailType {
     mohallaName: SelectType | null,
 
     category: SelectType | null,
-    subCategroy: SelectType | null,
+    subCategory: SelectType | null,
 
     propertyType: SelectType | null,
     typeOfOwnerShip: SelectType | null,
-    widthOfRoad: string,
-    area: string,
+    widthOfRoad: string | null,
+    area: string | null,
 
-    appartmentBuildingNo: string,
-    appartmentFlatNo: string,
-    appartmentFlatArea: string,
-
-    noOfFloor: string,
+    appartmentBuildingNo: string | null,
+    appartmentFlatNo: string | null,
 }
 
 const validationSchema = Yup.object().shape({
@@ -39,40 +38,45 @@ const validationSchema = Yup.object().shape({
 
 
 const Details = () => {
+    const { property } = useContext(PropertyContext);
+    const { user } = useContext(AuthContext);
+
+    const [ownershipTypeOptions, setOwnershipTypeOptions] = useState<SelectType[]>([
+        { label: 'Individual Building', value: '1' },
+        { label: 'Flat in Appartment', value: '2' },
+        { label: 'Others', value: '3' },
+    ]);
+
+    const selectedOwnerShipType = ownershipTypeOptions.find((c) => c.value == property?.typeOfOwnership) || null;
+
+    console.log(selectedOwnerShipType);
+
+
     const [initialValues, setInitialValues] = useState<PropertyDetailType>({
         zone: null,
         ward: null,
         mohallaName: null,
 
         category: null,
-        subCategroy: null,
+        subCategory: null,
 
         propertyType: null,
-        typeOfOwnerShip: null,
-        widthOfRoad: '',
-        area: '',
+        typeOfOwnerShip: selectedOwnerShipType || null,
+        widthOfRoad: property?.widthOfRoad || null,
+        area: property?.areaOfPlot || null,
 
-        appartmentBuildingNo: '',
-        appartmentFlatNo: '',
-        appartmentFlatArea: '',
-        noOfFloor: ''
+        appartmentBuildingNo: property?.buildingNo || null,
+        appartmentFlatNo: property?.flatNo || null,
     });
 
     const theme = useTheme();
     const safeAreaInsets = useSafeAreaInsets();
     const navigation = useNavigation();
-    const { property } = useContext(PropertyContext)
 
-    const [zoneOptions, setZoneOptions] = useState<SelectType[]>([
-        { label: 'Zone 1', value: 'value1' },
-        { label: 'Zone 2', value: 'value2' },
-        { label: 'Zone 3', value: 'value3' },
-    ]);
-    const [wardOptions, setWardOptions] = useState<SelectType[]>([
-        { label: 'Ward 1', value: 'value1' },
-        { label: 'Ward 2', value: 'value2' },
-        { label: 'Ward 3', value: 'value3' },
-    ]);
+
+    const [zoneOptions, setZoneOptions] = useState<SelectType[]>([]);
+    const [wardOptions, setWardOptions] = useState<SelectType[]>([]);
+
     const [categryOptions, setCategoryOptions] = useState<SelectType[]>([
         { label: 'School / Collage', value: 'value1' },
         { label: 'Shop / Tea Stall', value: 'value2' },
@@ -94,14 +98,14 @@ const Details = () => {
         { label: 'Mix (M)', value: '3' },
         { label: 'Vacant Land (P)', value: '4' },
     ]);
-    const [ownershipTypeOptions, setOwnershipTypeOptions] = useState<SelectType[]>([
-        { label: 'Individual Building', value: '1' },
-        { label: 'Flat in Appartment', value: '2' },
-        { label: 'Others', value: '3' },
-    ]);
 
-    const [isIndividualBuilding, setIsIndividualBuilding] = useState(false);
-    const [isFlat, setIsFlat] = useState(false);
+
+    const [isIndividualBuilding, setIsIndividualBuilding] = useState(selectedOwnerShipType?.value === '1' ? true : false);
+    const [isFlat, setIsFlat] = useState(selectedOwnerShipType?.value === '2' ? true : false);
+
+    const [loading, setLoading] = useState(false);
+
+
 
 
 
@@ -111,7 +115,7 @@ const Details = () => {
             const { data } = await getWardList(zoneId, 0, 0);
             // console.log(data)
             if (data.code === 200 && data.status === 'Success') {
-                setZoneOptions(data.data.wards.map(cur => ({ label: cur.wardNumber, value: cur.wardId })))
+                setWardOptions(data.data.wards.map(cur => ({ label: cur.wardNumber, value: cur.wardId })))
                 const ind = data.data.wards.findIndex(c => c.wardId === property?.ward);
                 // console.log(ind)
                 if (ind >= 0) {
@@ -130,7 +134,7 @@ const Details = () => {
     const fetchZones = async () => {
         try {
             const { data } = await getZoneList(0, 0);
-            // console.log(data)
+            console.log(data)
             if (data.code === 200 && data.status === 'Success') {
                 setZoneOptions(data.data.zones.map(cur => ({ label: cur.zoneName, value: cur.zoneId })));
                 const ind = data.data.zones.findIndex(c => c.zoneId === property?.zone);
@@ -149,21 +153,58 @@ const Details = () => {
     }
 
 
-    
+
 
     useEffect(() => {
-        fetchZones()
-    }, [])
+        fetchZones();
+    }, []);
+
+
+
+    const updateDetails = async (values: PropertyDetailType) => {
+        const updateDetailsPayload: PropertyMaster = {
+            householdNo: property?.householdNo,
+            zone: values.zone?.value,
+            ward: values.ward?.value,
+            category: property?.category,
+            subcategory: property?.subcategory,
+            mohallaName: property?.mohallaName,
+            propertyType: property?.propertyType,
+            typeOfOwnership: values.typeOfOwnerShip?.value,
+            widthOfRoad: values.widthOfRoad,
+            areaOfPlot: values.area,
+
+            buildingNo: values.appartmentBuildingNo,
+            flatNo: values.appartmentFlatNo,
+            updatedBy: user.username
+        };
+
+        try {
+            setLoading(true)
+            const resp = await updatePropertyMaster(updateDetailsPayload);
+
+            if (resp.data.code === 200 && resp.data.status === 'Success') {
+                Alert.alert('Success', 'Property details updated successfully')
+            } else {
+                Alert.alert('Fail', 'Failed while updating property details.')
+            }
+        } catch (e) {
+            console.log(e);
+            Alert.alert('Error', 'Error while updating property details.')
+        } finally {
+            setLoading(false)
+        }
+    }
 
 
 
 
 
-    const handleTypeChange = (type: SelectType) => {
-        if (type.value === '1') {
+    const handleTypeChange = (type: SelectType | null) => {
+        if (type?.value === '1') {
             setIsIndividualBuilding(true);
             setIsFlat(false)
-        } else if (type.value === '2') {
+        } else if (type?.value === '2') {
             setIsIndividualBuilding(false);
             setIsFlat(true);
         } else {
@@ -175,10 +216,11 @@ const Details = () => {
 
     return (
         <ScrollView style={{ flexGrow: 1 }}>
+            <Loading visible={loading} />
             <Formik initialValues={initialValues}
                 enableReinitialize={true}
                 validationSchema={validationSchema}
-                onSubmit={(values) => console.log(values)}>
+                onSubmit={(values) => updateDetails(values)}>
                 {
                     ({ values, errors, handleSubmit, handleChange, setFieldValue, isValid }) => {
                         return (<View style={{ display: 'flex', gap: 12, marginBottom: safeAreaInsets.bottom + 80 }}>
@@ -204,7 +246,7 @@ const Details = () => {
 
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                                 <View style={{ flex: 1 }}>
-                                    <Dropdown options={subCategoryOptions} label="Sub Category " value={values.subCategroy} onSelect={(subCategory: SelectType) => setFieldValue('subCategory', subCategory)} />
+                                    <Dropdown options={subCategoryOptions} label="Sub Category " value={values.subCategory} onSelect={(subCategory: SelectType) => setFieldValue('subCategory', subCategory)} />
                                 </View>
                             </View>
 
@@ -230,9 +272,9 @@ const Details = () => {
                                     <View style={{ flex: 1 }}>
                                         <Input label='Flat No.' value={values.appartmentFlatNo} onChangeText={handleChange('appartmentFlatNo')} />
                                     </View>
-                                    <View style={{ flex: 1 }}>
+                                    {/* <View style={{ flex: 1 }}>
                                         <Input label='Area of Flat (Sq. Ft.)' value={values.appartmentFlatArea} onChangeText={handleChange('appartmentFlatArea')} />
-                                    </View>
+                                    </View> */}
                                 </View>
                             </View>
 
@@ -260,7 +302,7 @@ const Details = () => {
                                         <Input label='Width of road sorrounding (Ft)' value={values.widthOfRoad} onChangeText={handleChange('widthOfRoad')} />
                                     </View>
                                     <View style={{ flex: 1 }}>
-                                        <Input label='Area (Sq. Meters)' value={values.area} onChangeText={handleChange('area')} />
+                                        <Input label='Area (Sq. Ft)' value={values.area} onChangeText={handleChange('area')} />
                                     </View>
                                 </View>
 

@@ -1,5 +1,5 @@
-import { PermissionsAndroid, ScrollView, StyleSheet, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, PermissionsAndroid, ScrollView, StyleSheet, View } from 'react-native'
+import React, { useContext, useState } from 'react'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Dropdown from '../../../components/Dropdown';
@@ -9,58 +9,62 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/material-design-icons'
 import Geolocation from '@react-native-community/geolocation';
 import Loading from '../../../components/Loading';
+import { updatePropertyMaster } from '../../../API/service';
+import { PropertyMaster } from '../../../Models/models';
+import { PropertyContext } from '../../../contexts/PropertyContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 interface PropertyAddressType {
-  propertyAddress: string,
-  propertyAddressDistrict: string,
-  propertyAddressCity: string,
-  propertyAddressPin: string,
+  propertyAddress: string | null,
+  propertyAddressDistrict: string | null,
+  propertyAddressCity: string | null,
+  propertyAddressPin: string | null,
   isOwnerAddressSame: boolean,
-  ownerAddress: string,
-  ownerAddressDistrict: string,
-  ownerAddressCity: string,
-  ownerAddressPin: string,
+  ownerAddress: string | null,
+  ownerAddressDistrict: string | null,
+  ownerAddressCity: string | null,
+  ownerAddressPin: string | null,
   attribute0: string | null,
   attribute1: string | null,
   attribute2: string | null,
   attribute3: string | null,
-  widthOfRoad?: string | null;
-  areaOfPlot?: string | null;
 }
 
 const validationSchema = Yup.object().shape({
-  propertyAddressDistrict: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
-  propertyAddressCity: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
-  propertyAddressPin: Yup.string().matches(/^[0-9]+$/, 'Only digits.').min(6, '6 digits.').max(6, '6 digits.'),
+  // propertyAddressDistrict: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
+  // propertyAddressCity: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
+  propertyAddressPin: Yup.string().nullable().matches(/^[0-9]+$/, 'Only digits.').min(6, '6 digits.').max(6, '6 digits.'),
 
-  ownerAddressDistrict: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
-  ownerAddressCity: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
-  ownerAddressPin: Yup.string().matches(/^[0-9]+$/, 'Only digits.').min(6, '6 digits.').max(6, '6 digits.'),
+  // ownerAddressDistrict: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
+  // ownerAddressCity: Yup.string().matches(/^[a-zA-Z ]*$/, 'Allowed only alphabets.'),
+  ownerAddressPin: Yup.string().nullable().matches(/^[0-9]+$/, 'Only digits.').min(6, '6 digits.').max(6, '6 digits.'),
 })
 
 
 
 const Address = () => {
+  const {property} = useContext(PropertyContext);
+  const { user } = useContext(AuthContext);
+
+
   const [initialValues, setInitialValues] = useState<PropertyAddressType>({
-    propertyAddress: '',
-    propertyAddressDistrict: '',
-    propertyAddressCity: '',
-    propertyAddressPin: '',
-    isOwnerAddressSame: false,
-    ownerAddress: '',
-    ownerAddressDistrict: '',
-    ownerAddressCity: '',
-    ownerAddressPin: '',
-    attribute0: '', // property house/buildig no
-    attribute1: '', // propert landmark
-    attribute2: '', //owner address house/building no
-    attribute3: '', // owner address land mark
-    widthOfRoad: '',
-    areaOfPlot: ''
+    propertyAddress: property?.propertyAddress || null,
+    propertyAddressDistrict: property?.propertyAddressDistrict || null,
+    propertyAddressCity: property?.propertyAddressCity || null,
+    propertyAddressPin: property?.propertyAddressPin || null,
+    isOwnerAddressSame: property?.isOwnerAddressSame || false,
+    ownerAddress: property?.ownerAddress || null,
+    ownerAddressDistrict: property?.ownerAddressDistrict || null,
+    ownerAddressCity: property?.ownerAddressCity || null,
+    ownerAddressPin:  property?.ownerAddressPin || null,
+    attribute0: property?.attribute0 || null, // property house/buildig no
+    attribute1: property?.attribute1 || null, // propert landmark
+    attribute2: property?.attribute2 || null, //owner address house/building no
+    attribute3: property?.attribute3 || null, // owner address land mark
   });
 
-  const [longitude, setLongitude] = useState('');
-  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState(property?.longitude);
+  const [latitude, setLatitude] = useState(property?.latitude);
 
   const theme = useTheme();
   const safeAreaInsets = useSafeAreaInsets();
@@ -89,10 +93,56 @@ const Address = () => {
 
 
 
+  const updateDetails = async (values: PropertyAddressType) => {
+    const updateAddressPayload: PropertyMaster = {
+      householdNo: property?.householdNo,
+
+      propertyAddress: values.propertyAddress,
+      propertyAddressDistrict: values.propertyAddressDistrict,
+      propertyAddressCity: values.propertyAddressCity,
+      propertyAddressPin: values.propertyAddressPin,
+      attribute0: values.attribute0,
+      attribute1: values.attribute1,
+
+      ownerAddress: values.ownerAddress,
+      ownerAddressDistrict: values.ownerAddressDistrict,
+      ownerAddressCity:values.ownerAddressCity,
+      ownerAddressPin: values.ownerAddressPin,
+      attribute2: values.attribute2,
+      attribute3: values.attribute3,
+
+      isOwnerAddressSame: Boolean(values.isOwnerAddressSame),
+
+      latitude: latitude,
+      longitude: longitude,
+
+      updatedBy: user.username
+    };
+    console.log(updateAddressPayload)
+    try {
+      setLoading(true)
+      const resp = await updatePropertyMaster(updateAddressPayload);
+
+      if (resp.data.code === 200 && resp.data.status === 'Success') {
+        Alert.alert('Success', 'Address updated successfully')
+      } else {
+        Alert.alert('Fail', 'Failed while updating address.')
+      }
+    } catch (e) {
+      console.log(e);
+      Alert.alert('Error', 'Error while updating address.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
+
   return (
     <ScrollView>
       <Loading visible={loading} />
-      <Formik initialValues={initialValues} enableReinitialize={true} validationSchema={validationSchema} onSubmit={(values) => console.log(values)}>
+      <Formik initialValues={initialValues} enableReinitialize={true} validationSchema={validationSchema} 
+        onSubmit={(values) => updateDetails(values)}>
         {
           ({ values, errors, handleSubmit, setFieldValue, handleChange, isValid }) => {
 
@@ -239,7 +289,7 @@ const Address = () => {
                     loading={isLocationFetching}
                     onPress={getCurrentLocation}>Get Current Location</Button>
                   <View>
-                    {(longitude || latitude) ? <Text style={{ fontSize: 12, textAlign: 'center' }}>Longitude: {longitude}, Latiude: {latitude}</Text> : <Text></Text>}
+                    {(longitude || latitude) ? <Text style={{ fontSize: 12, textAlign: 'center' }}>Longitude: {longitude}, Latiude: {latitude}</Text> : <Text>''</Text>}
                   </View>
                 </View>
 
@@ -248,7 +298,7 @@ const Address = () => {
 
 
 
-                <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 32, textDecorationLine: 'underline' }}>Land Related Data</Text>
+                {/* <Text variant="titleSmall" style={{ textAlign: 'center', marginTop: 32, textDecorationLine: 'underline' }}>Land Related Data</Text>
                 <View style={{ marginTop: 8, display: 'flex', gap: 6 }}>
                   <View style={{ flex: 1 }}>
                     <Input label='Width of the Road sorrounding the property' value={values.widthOfRoad} onChangeText={handleChange('widthOfRoad')} />
@@ -256,7 +306,7 @@ const Address = () => {
                   <View style={{ flex: 1 }}>
                     <Input label='Area of the property/plot (Sq. Ft.)' value={values.areaOfPlot} onChangeText={handleChange('areaOfPlot')} />
                   </View>
-                </View>
+                </View> */}
 
                 <Button style={{ marginTop: 20 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Address</Button>
 

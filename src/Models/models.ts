@@ -9,11 +9,11 @@ export interface PropertyMaster {
     propertyId?: number;
     ownerId?: number;
     householdNo?: string | null; 
-    zone?: number;
-    ward?: number;
+    zone?: string | number | null;
+    ward?: string | number | null;
     wardName?: string | null;
     propertyType?: string | null;
-    typeOfOwnership?: number;
+    typeOfOwnership?: string | number | null;
     otherTypeOfOwnerShip?: string | null;
     widthOfRoad?: string | null;
     areaOfPlot?: string | null;
@@ -69,8 +69,8 @@ export interface PropertyMaster {
     mohallaName?: string | null | null;
     ownerName?: string | null;
     amount?: number;
-    category?: string | null;
-    subcategory?: string | null;
+    category?: string | number | null;
+    subcategory?: string | number | null;
     rate?: number;
     createdBy?: string | null;
     createdOn?: string | null;
