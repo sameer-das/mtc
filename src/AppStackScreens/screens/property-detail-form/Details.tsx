@@ -9,7 +9,7 @@ import { Button, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/material-design-icons';
 import { useNavigation } from '@react-navigation/native';
-import { getWardList, getZoneList, updatePropertyMaster } from '../../../API/service';
+import { getCategories, getMohallaList, getPropertyType, getSubCategoriesOfCategory, getWardList, getZoneList, updatePropertyMaster } from '../../../API/service';
 import { PropertyContext } from '../../../contexts/PropertyContext';
 import Loading from '../../../components/Loading';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -48,8 +48,6 @@ const Details = () => {
     ]);
 
     const selectedOwnerShipType = ownershipTypeOptions.find((c) => c.value == property?.typeOfOwnership) || null;
-
-    console.log(selectedOwnerShipType);
 
 
     const [initialValues, setInitialValues] = useState<PropertyDetailType>({
@@ -134,7 +132,7 @@ const Details = () => {
     const fetchZones = async () => {
         try {
             const { data } = await getZoneList(0, 0);
-            console.log(data)
+            // console.log(data)
             if (data.code === 200 && data.status === 'Success') {
                 setZoneOptions(data.data.zones.map(cur => ({ label: cur.zoneName, value: cur.zoneId })));
                 const ind = data.data.zones.findIndex(c => c.zoneId === property?.zone);
@@ -154,9 +152,105 @@ const Details = () => {
 
 
 
+    const fetchMohalla = async () => {
+        try {
+            const { data } = await getMohallaList(0, 0);
+            // console.log(data)
+            if (data.code === 200 && data.status === 'Success') {
+                setMohallaOptions(data.data.mohallas.map(cur => ({ label: cur.mohallaName, value: cur.mohallaId })));
+                const ind = data.data.mohallas.findIndex(c => c.mohallaId === (property?.mohallaName ? +property?.mohallaName : 0));
+                // console.log(ind)
+                if (ind >= 0) {
+                    setInitialValues((prev) => {
+                        return { ...prev, mohallaName: { label: data.data.mohallas[ind].mohallaName, value: data.data.mohallas[ind].mohallaId } }
+                    });
+                }
+            }
+
+        } catch (error) {
+
+        }
+    }
+
+
+
+    const fetchSubCategories = async (categoryId: number) => {
+        try {
+            // console.log('fetch sub cat ', categoryId)
+            const { data } = await getSubCategoriesOfCategory(categoryId, 0, 0);
+            // console.log(data)
+            if (data.code === 200 && data.status === 'Success') {
+                setSubCategoryOptions(data.data.subCategories.map(cur => ({ label: cur.subCategoryName, value: cur.subCategoryId })))
+                const ind = data.data.subCategories.findIndex(c => c.subCategoryId === (property?.subcategory ? +property.subcategory : 0));
+                // console.log(ind)
+                if (ind >= 0) {
+                    setInitialValues((prev) => {
+                        return { ...prev, subCategory: { label: data.data.subCategories[ind].subCategoryName, value: data.data.subCategories[ind].subCategoryId } }
+                    });
+                }
+            }
+        } catch (error) {
+
+        }
+    }
+
+
+
+    const fetchCategories = async () => {
+        try {
+            const { data } = await getCategories(0, 0);
+            // console.log(data)
+            if (data.code === 200 && data.status === 'Success') {
+                setCategoryOptions(data.data.categories.map(cur => ({ label: cur.categoryName, value: cur.categoryId })));
+                const ind = data.data.categories.findIndex(c => c.categoryId === (property?.category ? +property.category : 0) );
+                // console.log(property?.propertyType)
+                // console.log(ind)
+                if (ind >= 0) {
+                    setInitialValues((prev) => {
+                        return { ...prev, category: { label: data.data.categories[ind].categoryName, value: data.data.categories[ind].categoryId } }
+                    });
+                    fetchSubCategories(data.data.categories[ind].categoryId)
+                }
+            }
+
+        } catch (error) {
+
+        }
+    }
+
+
+
+    const fetchPropertyType = async () => {
+        try {
+            const { data } = await getPropertyType(0, 0);
+            // console.log(data)
+            if (data.code === 200 && data.status === 'Success') {
+                setPropertyTypeOptions(data.data.propertyTypes.map(cur => ({ label: cur.propertyTypeName, value: cur.propertyTypeName })));
+                const ind = data.data.propertyTypes.findIndex(c => c.propertyTypeName === property?.propertyType );
+                // console.log(property?.category)
+                // console.log(ind)
+                if (ind >= 0) {
+                    setInitialValues((prev) => {
+                        return { ...prev, propertyType: { label: data.data.propertyTypes[ind].propertyTypeName, value: data.data.propertyTypes[ind].propertyTypeName } }
+                    });
+                }
+            }
+
+        } catch (error) {
+
+        }
+    }
+
+    
+
+
+
 
     useEffect(() => {
         fetchZones();
+        fetchMohalla();
+        fetchCategories();
+        fetchPropertyType();
     }, []);
 
 
@@ -228,7 +322,7 @@ const Details = () => {
                                 <View style={{ flex: 1 }}>
                                     <Dropdown options={zoneOptions} label="Zone" value={values.zone} onSelect={(zone: SelectType) => {
                                         setFieldValue('zone', zone);
-                                        fetchWard(+zone.value)
+                                        fetchWard(+zone.value);
                                     }} />
                                 </View>
                                 <View style={{ flex: 1 }}>
@@ -240,7 +334,11 @@ const Details = () => {
                             </View>
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                                 <View style={{ flex: 1 }}>
-                                    <Dropdown options={categryOptions} label="Category" value={values.category} onSelect={(category: SelectType) => setFieldValue('category', category)} />
+                                    <Dropdown options={categryOptions} label="Category" value={values.category} onSelect={(category: SelectType) => {
+                                        setFieldValue('category', category);
+                                        setFieldValue('subCategory', {});
+                                        fetchSubCategories(+category.value);
+                                        }} />
                                 </View>
                             </View>
 

@@ -109,11 +109,25 @@ export const getOwnerDetails = async (ownerId: number) => {
 }
 
 export const getZoneList = async (pageNumber: number, pageSize: number) => {
-    return apiClient.get(`/Master/zoneList`, {params: {pageNumber, pageSize}})
-    // ?pageNumber=${pageNumber}&pageSize=${pageSize}
+    return apiClient.get(`/Master/zoneList`, { params: { pageNumber, pageSize } })
 }
 
 export const getWardList = async (zoneId: number, pageNumber: number, pageSize: number) => {
-    return apiClient.get(`/Master/wardList`, {params: {zoneId, pageNumber, pageSize}})
-    // ?pageNumber=${pageNumber}&pageSize=${pageSize}
+    return apiClient.get(`/Master/wardList`, { params: { zoneId, pageNumber, pageSize } })
+}
+
+export const getMohallaList = async (pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/mohallaList`, { params: { pageNumber, pageSize } })
+}
+
+export const getCategories = async (pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/categoryList`, { params: { pageNumber, pageSize } })
+}
+
+export const getSubCategoriesOfCategory = async (categoryId: number, pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/subCategoriesOfCategory`, { params: { categoryId, pageNumber, pageSize } })
+}
+
+export const getPropertyType = async (pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/propertyTypes`, { params: { pageNumber, pageSize } })
 }
