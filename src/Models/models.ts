@@ -91,3 +91,14 @@ export interface PropertyMaster {
     photo?: string | null;
     specialCertificate?: string | null;
 }
+
+
+export interface PropertyDocumentUploadPayload {
+  documentId: number;
+  documentType: string;
+  propertyId: number;
+  documentName: string;
+  documentUploadedBy: number;
+  documentUploadedOn: string;
+  documentContent: string;
+}

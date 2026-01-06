@@ -1,4 +1,4 @@
-import { LoginData, PropertyMaster } from '../Models/models';
+import { LoginData, PropertyDocumentUploadPayload, PropertyMaster } from '../Models/models';
 
 import apiClient from './ApiClient';
 
@@ -130,4 +130,16 @@ export const getSubCategoriesOfCategory = async (categoryId: number, pageNumber:
 
 export const getPropertyType = async (pageNumber: number, pageSize: number) => {
     return apiClient.get(`/Master/propertyTypes`, { params: { pageNumber, pageSize } })
+}
+
+export const propertyDocumentUpload = async (payload: PropertyDocumentUploadPayload) => {
+    return apiClient.post(`/Master/propertyDocumentUpload`, payload)
+}
+
+export const propertyDocumentList = async (propertyId: number) => {
+    return apiClient.get(`/Master/propertyDocumentList`, { params: { propertyId } })
+}
+
+export const propertyDocumentDownload = async (fileName: string) => {
+    return apiClient.get(`/Master/propertyDocumentDownload`, { params: { fileName } })
 }

@@ -13,11 +13,13 @@ interface ImagePickerProps {
     cropperCircleOverlay?: boolean,
     useFrontCamera?: boolean,
     compressImageQuality?: number,
-    
+    onUpload?: Function,
+
 }
-const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleOverlay, useFrontCamera, compressImageQuality }: ImagePickerProps) => {
+const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleOverlay, useFrontCamera, compressImageQuality, onUpload }: ImagePickerProps) => {
     const theme = useTheme()
     const [visible, setVisible] = React.useState(false);
+    const [image, setImage] = useState<any>();
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
 
@@ -34,12 +36,15 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
             mediaType: 'photo',
             compressImageQuality: compressImageQuality || 0.3,
         }).then((image: any) => {
-            setValue('data:image/jpeg;base64,' + image.data)
+            setValue('data:image/jpeg;base64,' + image.data);
+            setImage(image);
         }).catch(x => {
             console.log('Error in openPicker')
             console.log(x);
         });
     }
+
+
     const openCamera = async () => {
         hideModal();
         const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -51,7 +56,7 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
                 buttonNegative: 'Cancel',
                 buttonPositive: 'OK',
             },)
-        console.log(granted);
+        // console.log(granted);
 
         ImagePicker.openCamera({
             freeStyleCropEnabled: true,
@@ -63,8 +68,9 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
             useFrontCamera: useFrontCamera || false,
             compressImageQuality: compressImageQuality || 0.3,
         }).then((image: any) => {
-            console.log(image);
-            setValue('data:image/jpeg;base64,' + image.data)
+            // console.log(image);
+            setValue('data:image/jpg;base64,' + image.data);
+            setImage(image);
         }).catch(x => {
             console.log('Error in openCamera')
             console.log(x);
@@ -73,18 +79,30 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
 
 
 
+    const handleUpload = () => {
+        onUpload && onUpload({
+            filename: image?.filename,
+            label: label,
+            imageContent: 'data:image/jpg;base64,' + image.data
+        })
+    }
+
+
 
     return (
         <View style={{}}>
             <View >
-                <Text variant='labelSmall' style={[{color: theme.colors.primary}]}>{label}</Text>
-                <Pressable style={[{height: value ? 100 : 50}, styles.border, styles.centerText, {borderColor: theme.colors.onSurface}]} onPress={showModal}>
+                <Text variant='labelSmall' style={[{ color: theme.colors.primary }]}>{label}</Text>
+                <Pressable style={[{ height: value ? 100 : 50 }, styles.border, styles.centerText, { borderColor: theme.colors.onSurface }]} onPress={showModal}>
                     {!value && <Text style={styles.uploadText}>{placeholder}</Text>}
                     {value && <Image source={{ uri: value }} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />}
                 </Pressable>
                 {value ? <View style={styles.imageBottomControlContainer}>
                     <Text variant='labelSmall' style={{ color: theme.colors.tertiary }}>Tap on the image to upload again!</Text>
-                    <IconButton icon='delete' iconColor={theme.colors.error} onPress={() => setValue('')} />
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                        {onUpload && <IconButton icon='upload' iconColor={theme.colors.primary} onPress={handleUpload} />}
+                        <IconButton icon='delete' iconColor={theme.colors.error} onPress={() => { setValue(''); setImage(null) }} />
+                    </View>
                 </View> : <View style={styles.imageBottomControlContainer}></View>}
             </View>
 
@@ -156,7 +174,7 @@ const modal = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-    border: {        
+    border: {
         borderWidth: 1,
         borderRadius: 4
     },
