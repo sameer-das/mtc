@@ -143,3 +143,8 @@ export const propertyDocumentList = async (propertyId: number) => {
 export const propertyDocumentDownload = async (fileName: string) => {
     return apiClient.get(`/Master/propertyDocumentDownload`, { params: { fileName } })
 }
+
+export const getFyList = async (pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/fyList`, { params: { pageNumber, pageSize } })
+}
+

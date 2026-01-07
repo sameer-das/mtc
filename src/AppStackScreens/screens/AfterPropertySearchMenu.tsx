@@ -31,11 +31,11 @@ const AfterPropertySearchMenu = ({ navigation }) => {
             <Text variant='headlineSmall' style={{ textAlign: 'center', marginBottom: 12 }}>Owner Details</Text>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Owner Name : </Text>
-                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.salutation || ''} {owner?.ownerName || 'Not Updated'}</Text>
+                <Text variant='titleSmall' style={{ width: '50%', color: theme.colors.primary, fontWeight: 'bold' }}>{owner?.salutation || ''} {owner?.ownerName || property?.ownerName || 'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>{owner.careOf || 'C/o'}</Text>
-                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.guardianName || 'Not Updated'}</Text>
+                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.guardianName ||  'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Gender</Text>

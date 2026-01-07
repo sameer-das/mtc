@@ -1,23 +1,42 @@
 import { StyleSheet, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PopertyNumberBanner from './PopertyNumberBanner'
 import { PropertyContext } from '../../contexts/PropertyContext'
 import { Button, Text, useTheme } from 'react-native-paper'
 import Dropdown from '../../components/Dropdown'
 import { useNavigation } from '@react-navigation/native'
 import { SelectType } from '../../Models/models'
+import { getFyList } from '../../API/service'
 
 const DemandGeneration = () => {
   const theme = useTheme()
   const navigation = useNavigation()
   const { property } = useContext(PropertyContext);
-
-  const [financialYearOptions, setFinancalYearOptions] = useState<SelectType[]>([
-    { label: 'FY-2024-25', value: 'FY-2024-25' },
-    { label: 'FY-2025-26', value: 'FY-2025-26' },
-  ])
+  console.log(property)
+  const [financialYearOptions, setFinancalYearOptions] = useState<SelectType[]>([])
 
   const [financialYear, setFinancialYear] = useState<SelectType>();
+
+  const fetchFy = async () => {
+    try {
+      const {data} = await getFyList(0,0);
+      console.log(data)
+      if(data.code === 200 && data.status === 'Success') {
+        setFinancalYearOptions(data.data.fys.map(curr => ({label: curr.fyName, value: curr.fyId})))
+      }
+    } catch (error) {
+      console.log('Error while getting FY');
+      console.log(error)
+    }
+  }
+
+
+
+  useEffect(() => {
+    fetchFy()
+  }, [])
+
+
 
   return (
     <View style={{...styles.container, backgroundColor: theme.colors.background}}>

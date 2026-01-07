@@ -1,5 +1,5 @@
 import { StyleSheet, View, Pressable, Image, PermissionsAndroid } from 'react-native'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Modal, Text, Portal, Button, IconButton } from 'react-native-paper'
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from '@react-native-vector-icons/material-design-icons'
@@ -14,16 +14,18 @@ interface ImagePickerProps {
     useFrontCamera?: boolean,
     compressImageQuality?: number,
     onUpload?: Function,
+    identifier?: string
 
 }
-const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleOverlay, useFrontCamera, compressImageQuality, onUpload }: ImagePickerProps) => {
+const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleOverlay, useFrontCamera, compressImageQuality, onUpload,identifier }: ImagePickerProps) => {
     const theme = useTheme()
     const [visible, setVisible] = React.useState(false);
     const [image, setImage] = useState<any>();
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
+    const showUpload = useRef(false);
 
-
+    console.log('CustomImagePicker loaded')
     const openGallery = async () => {
         hideModal();
 
@@ -36,8 +38,9 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
             mediaType: 'photo',
             compressImageQuality: compressImageQuality || 0.3,
         }).then((image: any) => {
-            setValue('data:image/jpeg;base64,' + image.data);
+            setValue('data:image/jpg;base64,' + image.data);
             setImage(image);
+            showUpload.current = true;
         }).catch(x => {
             console.log('Error in openPicker')
             console.log(x);
@@ -71,6 +74,7 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
             // console.log(image);
             setValue('data:image/jpg;base64,' + image.data);
             setImage(image);
+            showUpload.current = true;
         }).catch(x => {
             console.log('Error in openCamera')
             console.log(x);
@@ -82,8 +86,8 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
     const handleUpload = () => {
         onUpload && onUpload({
             filename: image?.filename,
-            label: label,
-            imageContent: 'data:image/jpg;base64,' + image.data
+            imageContent: 'data:image/jpg;base64,' + image.data,
+            identifier: identifier
         })
     }
 
@@ -100,8 +104,8 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
                 {value ? <View style={styles.imageBottomControlContainer}>
                     <Text variant='labelSmall' style={{ color: theme.colors.tertiary }}>Tap on the image to upload again!</Text>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                        {onUpload && <IconButton icon='upload' iconColor={theme.colors.primary} onPress={handleUpload} />}
-                        <IconButton icon='delete' iconColor={theme.colors.error} onPress={() => { setValue(''); setImage(null) }} />
+                        {(onUpload && showUpload.current) && <IconButton icon='upload' iconColor={theme.colors.primary} onPress={handleUpload} />}
+                        {showUpload.current && <IconButton icon='delete' iconColor={theme.colors.error} onPress={() => { setValue(''); setImage(null) }} />}
                     </View>
                 </View> : <View style={styles.imageBottomControlContainer}></View>}
             </View>
@@ -136,7 +140,7 @@ const CustomImagePicker = ({ value, setValue, placeholder, label, cropperCircleO
     )
 }
 
-export default CustomImagePicker
+export default React.memo(CustomImagePicker);   
 
 const modal = StyleSheet.create({
     modalHeader: {

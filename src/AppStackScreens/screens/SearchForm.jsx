@@ -11,25 +11,30 @@ const SearchForm = ({ navigation }) => {
     const theme = useTheme();
     const [householdNo, setHouseholdNo] = useState('');
     const [isLoading, setIsLoading] = React.useState(false);
-    const {setProperty} = useContext(PropertyContext)
+    const { setProperty } = useContext(PropertyContext)
 
     const handleSearch = async () => {
         try {
             setIsLoading(true)
-            const resp = await getPropertyMasterDetail(householdNo);
-            console.log(resp)
-            if (resp.data.code === 200 && resp.data.status === 'Success') {
-                setProperty(resp.data.data);
-                navigation.push('PropertyMenu');
-            } else if (resp.data.code === 404) {
-                Alert.alert('Message', resp.data.data)
+            const { data } = await getPropertyMasterDetail(householdNo);
+            console.log(data)
+            if (data.code === 200 && data.status === 'Success') {
+                if(data.data.householdNo) {
+                    setProperty(data.data);
+                    navigation.push('PropertyMenu');
+                } else if (!data.data.householdNo) {
+                    Alert.alert('Not Found', 'Searched property not found.')
+                }
+ 
+            } else if (data.code === 404) {
+                Alert.alert('Message', data.data)
             } else {
-                Alert.alert('Fail','Failed while fetching property detail.')
+                Alert.alert('Fail', 'Failed while fetching property detail.')
             }
         } catch (e) {
 
             console.log(e)
-            Alert.alert('Error','Error while fetching property detail.')
+            Alert.alert('Error', 'Error while fetching property detail.')
         } finally {
             setIsLoading(false)
         }
@@ -43,7 +48,7 @@ const SearchForm = ({ navigation }) => {
     return (
         <View style={{ ...styles.container, backgroundColor: theme.colors.background }}>
             <Loading visible={isLoading} />
-            <Text variant="titleLarge" style={{ marginTop: 160  }}>Search Property</Text>
+            <Text variant="titleLarge" style={{ marginTop: 160 }}>Search Property</Text>
             <View style={{ ...styles.formArea }}>
                 <Input value={householdNo}
                     label="PIN/House Hold No"
