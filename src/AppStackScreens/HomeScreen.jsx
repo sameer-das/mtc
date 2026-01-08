@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Button, Text, useTheme } from 'react-native-paper';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 const HomeScreen = ({ navigation }) => {

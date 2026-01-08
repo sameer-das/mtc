@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
-import Input from '../../components/Input'
+import Input from '../components/Input'
 import { Button, Text, useTheme } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';

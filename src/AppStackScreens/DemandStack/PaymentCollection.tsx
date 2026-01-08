@@ -6,7 +6,7 @@ import Dropdown from '../../components/Dropdown'
 import Input from '../../components/Input'
 import { PropertyContext } from '../../contexts/PropertyContext'
 import { SelectType } from '../../Models/models'
-import PopertyNumberBanner from './PopertyNumberBanner'
+import PopertyNumberBanner from '../PopertyNumberBanner'
 import CustomImagePicker from '../../components/CustomImagePicker'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import Geolocation from '@react-native-community/geolocation'
@@ -147,16 +147,16 @@ const PaymentCollection = () => {
 
       <View style={{ flexDirection: 'row', gap: 6 }}>
         <Text style={{ flex: 1, }}>Previous Year Due</Text>
-        <Text style={{ flex: 1, textAlign: 'right' }}>1000.00</Text>
+        <Text style={{ flex: 1, textAlign: 'right' }}>2000.00</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 6 }}>
         <Text style={{ flex: 1, }}>Current Year Due</Text>
-        <Text style={{ flex: 1, textAlign: 'right' }}>500.00</Text>
+        <Text style={{ flex: 1, textAlign: 'right' }}>3000.00</Text>
       </View>
 
       <View style={{ marginTop: 6, paddingTop: 6, flexDirection: 'row', gap: 6, borderTopColor: theme.colors.primary, borderTopWidth: 2 }}>
         <Text variant="titleMedium" style={{ flex: 1, color: theme.colors.primary }}>Total</Text>
-        <Text variant="titleMedium" style={{ flex: 1, textAlign: 'right', color: theme.colors.primary }}>1500.00</Text>
+        <Text variant="titleMedium" style={{ flex: 1, textAlign: 'right', color: theme.colors.primary }}>3000.00</Text>
       </View>
 
       <View style={{ marginTop: 40, gap: 12 }}>

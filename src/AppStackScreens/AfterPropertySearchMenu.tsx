@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useCallback, useContext, useState } from 'react'
 import { Button, Text, useTheme } from 'react-native-paper'
-import { PropertyContext } from '../../contexts/PropertyContext';
-import { getOwnerDetails } from '../../API/service';
+import { PropertyContext } from '../contexts/PropertyContext';
+import { getOwnerDetails } from '../API/service';
 import { useFocusEffect } from '@react-navigation/native';
 import PopertyNumberBanner from './PopertyNumberBanner';
 
@@ -49,8 +49,9 @@ const AfterPropertySearchMenu = ({ navigation }) => {
             <View style={{ display: 'flex', gap: 12, marginTop: 40 }}>
                 <Button mode="contained" onPress={() => { navigation.push('UpdateDetailsStack') }}>View/Update Details</Button>
                 <Button mode="contained" onPress={() => { navigation.push('AadharAndPan') }}>Update Aadhar/Pan Details</Button>
-                <Button mode="contained" onPress={() => { navigation.push('DemandGeneration') }}>Generate Demand</Button>
-                <Button mode="contained" onPress={() => { navigation.push('PaymentCollection') }}>Payment Collection</Button>
+                <Button mode="contained" onPress={() => { navigation.push('DemandStack') }}>Demands</Button>
+                {/* <Button mode="contained" onPress={() => { navigation.push('DemandGeneration') }}>Generate Demand</Button>
+                <Button mode="contained" onPress={() => { navigation.push('PaymentCollection') }}>Payment Collection</Button> */}
             </View>
             <View style={{ marginTop: 12 }}>
                 {/* <Button mode="outlined" onPress={() => { navigation.replace('Search') }}>Search another property</Button> */}

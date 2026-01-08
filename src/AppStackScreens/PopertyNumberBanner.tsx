@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useContext } from 'react'
-import { PropertyContext } from '../../contexts/PropertyContext'
+import { PropertyContext } from '../contexts/PropertyContext'
 import { useTheme } from 'react-native-paper';
 
 const PopertyNumberBanner = () => {

@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 
 import { Button, Text, useTheme } from 'react-native-paper';
-import PopertyNumberBanner from '../PopertyNumberBanner';
+import PopertyNumberBanner from '../../PopertyNumberBanner';
 import Input from '../../../components/Input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

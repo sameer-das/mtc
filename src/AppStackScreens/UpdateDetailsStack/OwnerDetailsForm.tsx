@@ -12,7 +12,7 @@ import { AuthContext } from '../../contexts/AuthContext'
 import { PropertyContext } from '../../contexts/PropertyContext'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import PopertyNumberBanner from './PopertyNumberBanner'
+import PopertyNumberBanner from '../PopertyNumberBanner'
 
 
 interface OwnerDetailType {

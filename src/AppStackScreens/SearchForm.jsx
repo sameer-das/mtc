@@ -1,11 +1,10 @@
-import { Alert, StyleSheet, View } from 'react-native'
-import React, { useContext, useState } from 'react'
-import { Button, Text, TextInput, useTheme } from 'react-native-paper'
-import Input from '../../components/Input'
-import { ProgressBar, MD3Colors } from 'react-native-paper';
-import Loading from '../../components/Loading';
-import { getPropertyMasterDetail } from '../../API/service';
-import { PropertyContext } from '../../contexts/PropertyContext';
+import React, { useContext, useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
+import { Button, Text, useTheme } from 'react-native-paper';
+import { getPropertyMasterDetail } from '../API/service';
+import Input from '../components/Input';
+import Loading from '../components/Loading';
+import { PropertyContext } from '../contexts/PropertyContext';
 
 const SearchForm = ({ navigation }) => {
     const theme = useTheme();
