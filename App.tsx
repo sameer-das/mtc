@@ -7,7 +7,6 @@ import { PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { useContext, useState } from 'react';
 import { AuthContext, AuthProvider } from './src/contexts/AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
-import AppStack from './src/AppStackScreens/AppStack';
 import AuthStack from './src/AuthStackScreens/AuthStack';
 import { LightScheme } from './theme/light';
 import { DarkScheme } from './theme/dark';
