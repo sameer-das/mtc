@@ -3,18 +3,25 @@ import React from 'react'
 import Pdf from 'react-native-pdf';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PopertyNumberBanner from '../PopertyNumberBanner';
-import { Text } from 'react-native-paper';
+import { Button, Text, useTheme } from 'react-native-paper';
+import { useRoute } from '@react-navigation/native';
 
-const ViewDemand = () => {
+const ViewDemandPdf = () => {
   const safeAreaInsets = useSafeAreaInsets();
-  console.log(safeAreaInsets)
+  const theme = useTheme();
+  const route = useRoute();
+  console.log(route)
+
   // const source = { uri: 'https://pdfobject.com/pdf/sample.pdf', cache: true };
   const source = { uri: 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf', cache: true };
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, backgroundColor: theme.colors.background }}>
       <View>
         <PopertyNumberBanner />
-        <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>Demand</Text>
+        {/* <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>Demand</Text> */}
+        <View style={{flexDirection:'row', justifyContent:'flex-end', marginVertical: 8}}>
+          <Button mode='outlined'>Download</Button>
+        </View>
       </View>
 
       <Pdf source={source}
@@ -37,7 +44,7 @@ const ViewDemand = () => {
   )
 }
 
-export default ViewDemand
+export default ViewDemandPdf
 
 const styles = StyleSheet.create({
   container: {

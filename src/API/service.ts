@@ -1,4 +1,4 @@
-import { LoginData, PropertyDocumentUploadPayload, PropertyMaster } from '../Models/models';
+import { AddDemandTxnType, LoginData, PropertyDocumentUploadPayload, PropertyMaster } from '../Models/models';
 
 import apiClient from './ApiClient';
 
@@ -146,5 +146,17 @@ export const propertyDocumentDownload = async (fileName: string) => {
 
 export const getFyList = async (pageNumber: number, pageSize: number) => {
     return apiClient.get(`/Master/fyList`, { params: { pageNumber, pageSize } })
+}
+
+export const getDemandsOfProperty = async (propertyId: number, pageNumber: number, pageSize: number) => {
+    return apiClient.get(`/Master/getAllDemands`, { params: { propertyId, pageNumber, pageSize } })
+}
+
+export const getDemandsTxnOfProperty = async (propertyId: number, demandId: number) => {
+    return apiClient.get(`/Master/getAllDemandTxn`, { params: { propertyId, demandId } })
+}
+
+export const addDemandTransaction = async (payload: AddDemandTxnType) => {
+    return apiClient.post(`/Master/AddDemandTxn`, payload)
 }
 

@@ -7,12 +7,13 @@ import AadharAndPan from './AadharAndPan';
 import AfterPropertySearchMenu from './AfterPropertySearchMenu';
 import DemandList from './DemandStack/DemandList';
 import PaymentCollection from './DemandStack/PaymentCollection';
-import ViewDemand from './DemandStack/ViewDemand';
 import HomeScreen from './HomeScreen';
 import SearchForm from './SearchForm';
 import OwnerDetailsForm from './UpdateDetailsStack/OwnerDetailsForm';
 import AddFloorData from './UpdateDetailsStack/property-detail-form/AddFloorData';
 import PropertyDetailsForm from './UpdateDetailsStack/PropertyDetailsForm';
+import ViewDemandPdf from './DemandStack/ViewDemandPdf';
+import ListDemandTxns from './DemandStack/ListDemandTxns';
 
 const Stack = createNativeStackNavigator();
 const TopTabs = createMaterialTopTabNavigator();
@@ -47,8 +48,8 @@ const DemandStack = () => {
         }}>
             <Stack.Screen name='DemandList' component={DemandList} />
             <Stack.Screen name='PaymentCollection' component={PaymentCollection} />
-            <Stack.Screen name='ViewDemand' component={ViewDemand} />
-            
+            <Stack.Screen name='ViewDemandPdf' component={ViewDemandPdf} />
+            <Stack.Screen name='ListDemandTxns' component={ListDemandTxns} />            
         </Stack.Navigator>)
 }
 
