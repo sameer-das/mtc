@@ -41,9 +41,9 @@ function App() {
 
 
 function AppContent() {
-  console.log('App Content')
+
   const safeAreaInsets = useSafeAreaInsets();
-  console.log(safeAreaInsets)
+
   const { user, loading } = useContext(AuthContext);
 
   if (loading) {

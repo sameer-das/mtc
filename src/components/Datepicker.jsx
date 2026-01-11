@@ -30,6 +30,7 @@ const Datepicker = (props) => {
                 onCancel={() => {
                     setOpen(false)
                 }}
+                minimumDate={props.minimumDate}
             />
         </View>
     )

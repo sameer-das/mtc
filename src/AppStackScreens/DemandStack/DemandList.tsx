@@ -69,12 +69,15 @@ const DemandList = () => {
                                         <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Demand No. : {demand?.demandNo === '' ? 'Not Generated' : demand?.demandNo}</Text>
                                         <Text variant='bodySmall' style={{}}>Financial Year: {demand.fyName}</Text>
                                     </View>
-                                    <IconButton mode='text' icon={() => <Icon name='format-list-text' size={20} color={theme.colors.primary} />}
-                                        onPress={() => navigation.push('ListDemandTxns', { demandId: demand.demandId })} />
+                                    <Pressable onPress={() => navigation.push('ListDemandTxns', { demandId: demand.demandId, demandNo: demand.demandNo })}>
+                                        <Text variant='bodySmall' style={{color: theme.colors.primary, textDecorationLine:'underline'}}>All Transactions</Text>
+                                    </Pressable>
+                                    {/* <IconButton mode='text' icon={() => <Icon name='format-list-text' size={20} color={theme.colors.primary} />}
+                                        onPress={() => navigation.push('ListDemandTxns', { demandId: demand.demandId })} /> */}
                                 </View>
 
 
-                                <View style={{ marginTop: 8 }}>
+                                <View style={{ marginTop: 40 }}>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text variant='titleSmall' style={{ flex: 2, textAlign: 'right' }}>Previous Due :</Text>
                                         <Text variant='titleSmall' style={{ flex: 1, textAlign: 'right' }}> {demand.dueFromPrevYear}</Text>

@@ -14,6 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { AuthContext } from '../../contexts/AuthContext'
 import { addDemandTransaction } from '../../API/service'
 import { TRANSACTION_REMARKS } from '../../constants/constants'
+import Loading from '../../components/Loading'
 
 const getDate = (date: Date | string) => {
   const d = new Date(date).getTime() + 19800000;
@@ -44,11 +45,12 @@ const PaymentCollection = () => {
   const [showCustomReason, setShowCustomReason] = useState(false);
   const [hideAmountTxn, setHideAmountTxn] = useState(true);
 
-  const [isLocationFetching, setIsLocationFetching] = useState(false)
+  const [isLocationFetching, setIsLocationFetching] = useState(false);
 
+  const [loading, isLoading] = useState(false)
 
   useEffect(() => {
-    console.log(remark);
+
     if (remark?.value === 1) {
       setDisableAmount(true);
       setAmount(String(route.params.amountPending || 0));
@@ -166,8 +168,8 @@ const PaymentCollection = () => {
 
 
     const paylaod: AddDemandTxnType = {
-      billDate: new Date().toISOString(),
-      txnDate: new Date().toISOString(),
+      billDate: getDate(new Date().toISOString()),
+      txnDate: getDate(new Date().toISOString()),
       billNo: 0,
       propertyId: property?.propertyId,
       demandId: route.params.demandId,
@@ -183,16 +185,18 @@ const PaymentCollection = () => {
       attribute4: '',
     }
 
-    console.log(paylaod);
-
     try {
+      isLoading(true)
       const { data } = await addDemandTransaction(paylaod);
       if (data.code === 200 && data.status === 'Success') {
         Alert.alert('Success', 'Transaction Added Successfully.');
         navigation.goBack();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      Alert.alert('Error', 'Error while adding transaction.')
+    } finally {
+      isLoading(false);
     }
   }
 
@@ -218,6 +222,9 @@ const PaymentCollection = () => {
       { cancelable: false } // (Android only)
     );
   }
+
+  if (loading)
+    return <Loading visible={loading} />
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -248,7 +255,7 @@ const PaymentCollection = () => {
           <Input label="Amount" disabled={disableAmount} value={amount} keyboardType="numeric" onChangeText={setAmount} />
           <Input label="Transaction Number" disabled={disableTransactionNo} value={trasactionNo} onChangeText={setTransactionNo} />
         </>}
-        {showNextVisitDate && <Datepicker date={nextVisitDate} onConfirm={setNextVisitDate} />}
+        {showNextVisitDate && <Datepicker date={nextVisitDate} onConfirm={setNextVisitDate} minimumDate={new Date()} />}
         {showCustomReason && <Input value={otherReason} onChangeText={setOtherReason} label="Type other reason" />}
       </View>
 

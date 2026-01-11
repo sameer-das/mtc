@@ -34,22 +34,22 @@ const AfterPropertySearchMenu = ({ navigation }) => {
                 <Text variant='titleSmall' style={{ width: '50%', color: theme.colors.primary, fontWeight: 'bold' }}>{owner?.salutation || ''} {owner?.ownerName || property?.ownerName || 'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
-                <Text variant='titleMedium' style={{ width: '50%' }}>{owner.careOf || 'C/o'}</Text>
+                <Text variant='titleMedium' style={{ width: '50%' }}>{owner.careOf || 'C/o'} :</Text>
                 <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.guardianName ||  'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
-                <Text variant='titleMedium' style={{ width: '50%' }}>Gender</Text>
+                <Text variant='titleMedium' style={{ width: '50%' }}>Gender :</Text>
                 <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.gender || 'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
-                <Text variant='titleMedium' style={{ width: '50%' }}>Mobile</Text>
+                <Text variant='titleMedium' style={{ width: '50%' }}>Mobile :</Text>
                 <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.mobile || 'Not Updated'}</Text>
             </View>
             
             <View style={{ display: 'flex', gap: 12, marginTop: 40 }}>
                 <Button mode="contained" onPress={() => { navigation.push('UpdateDetailsStack') }}>View/Update Details</Button>
-                <Button mode="contained" onPress={() => { navigation.push('AadharAndPan') }}>Update Aadhar/Pan Details</Button>
-                <Button mode="contained" onPress={() => { navigation.push('DemandStack') }}>Demands</Button>
+                {/* <Button mode="contained" onPress={() => { navigation.push('AadharAndPan') }}>Update Aadhar/Pan Details</Button> */}
+                <Button mode="contained" onPress={() => { navigation.push('DemandStack') }}>View Demands/Transactions</Button>
                 {/* <Button mode="contained" onPress={() => { navigation.push('DemandGeneration') }}>Generate Demand</Button>
                 <Button mode="contained" onPress={() => { navigation.push('PaymentCollection') }}>Payment Collection</Button> */}
             </View>

@@ -71,8 +71,6 @@ apiClient.interceptors.response.use(
   response => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
-    console.log(error.response)
-    console.log(originalRequest)
     // Check for 401 status and ensure it's not the retry attempt of the original request
     if (error.response?.status === 401 && !originalRequest._retry) {
       // Mark as retried to prevent infinite loops
@@ -102,8 +100,7 @@ apiClient.interceptors.response.use(
             { refreshToken },
             { headers: { 'Content-Type': 'application/json' } }
           );
-          console.log('Refresh response')
-          console.log(response)
+
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
 
           // 2. Update the stored tokens
