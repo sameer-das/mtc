@@ -160,3 +160,7 @@ export const addDemandTransaction = async (payload: AddDemandTxnType) => {
     return apiClient.post(`/Master/AddDemandTxn`, payload)
 }
 
+export const generateDemand = async (propertyId: number, demandId: number, userId: number, lang: string = 'en',) => {
+    return apiClient.get(`/Pdf/demandGenerate`, { params: { lang, propertyId, demandId, userId } });
+}
+

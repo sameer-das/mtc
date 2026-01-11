@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import React, { useCallback, useContext, useState } from 'react'
 import { Button, Text, useTheme } from 'react-native-paper'
 import { PropertyContext } from '../contexts/PropertyContext';

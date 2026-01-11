@@ -5,7 +5,7 @@ import { TokenStorage } from './TokenStorage';
 // import { navigateToLogin } from './NavigationService'; // Create this utility or use a Context/Redux action
 
 // --- Configuration ---
-const API_BASE_URL = 'http://181.214.10.5/api';
+export const API_BASE_URL = 'http://181.214.10.5/api';
 const REFRESH_URL = '/Auth/refresh'; // Your refresh token endpoint
 const LOGIN_URL = '/Auth/login'; // Your refresh token endpoint
 

@@ -70,7 +70,7 @@ const ListDemandTxns = () => {
           <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Visit Comment</Text> :
           <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Bill No : {item.billNo}</Text>
         }
-        {item.amountPaid !== 0 && <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Amount Paid : {item.amountPaid}</Text>}
+        {item.amountPaid !== 0 && <Text variant='titleMedium' style={{ color: theme.colors.primary }}>Rs. {item.amountPaid}</Text>}
       </View>
 
       <View>
@@ -96,13 +96,13 @@ const ListDemandTxns = () => {
         <PopertyNumberBanner />
         <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>All Transactions</Text>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 12 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Switch value={showAllTxns} onValueChange={() => setShowAllTxns(!showAllTxns)} />
-            <Text variant='bodySmall' style={{ color: theme.colors.primary }}>Show All</Text>
+            <Text variant='labelSmall' style={{ color: theme.colors.primary }}>Show All</Text>
           </View>
 
-          <Text variant='bodySmall' style={{ color: theme.colors.primary }}>Showing {displayTxns.length}/{txns.length}</Text>
+          <Text variant='labelSmall' style={{ color: theme.colors.primary }}>Showing {displayTxns.length}/{txns.length}</Text>
         </View>
 
         <FlatList data={displayTxns} renderItem={renderItem} keyExtractor={item => item.txnId} />

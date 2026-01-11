@@ -1,10 +1,10 @@
-import { StyleSheet, ScrollView, View, Pressable } from 'react-native'
+import { StyleSheet, ScrollView, View, Pressable, Alert } from 'react-native'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, Text, useTheme, IconButton } from 'react-native-paper';
 import PopertyNumberBanner from '../PopertyNumberBanner';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { getDemandsOfProperty } from '../../API/service';
+import { generateDemand, getDemandsOfProperty } from '../../API/service';
 import { PropertyContext } from '../../contexts/PropertyContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import Icon from '@react-native-vector-icons/material-design-icons'
@@ -43,6 +43,23 @@ const DemandList = () => {
 
 
 
+    const generateDemandPdf = async (propertyId: number, demandId: number) => {
+        try {
+            const { data } = await generateDemand(propertyId, demandId, user.id);
+            if (data.code === 200 && data.status === 'Success') {
+                Alert.alert('Success', 'Demand generated successfully');
+                fetchAllDemands();
+            } else {
+                Alert.alert('Fail', 'Demand generate failed.');
+            }
+        } catch (error) {
+            console.log(error)
+            Alert.alert('Error', 'Demand generate error.');
+        }
+    }
+
+
+
     return (
         <ScrollView style={{ ...styles.container, marginBottom: safeAreaInsets.bottom, backgroundColor: theme.colors.background }}>
             <View style={{ paddingVertical: 8 }}>
@@ -66,11 +83,11 @@ const DemandList = () => {
                             <View style={{ paddingHorizontal: 8 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <View>
-                                        <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Demand No. : {demand?.demandNo === '' ? 'Not Generated' : demand?.demandNo}</Text>
+                                        <Text variant='titleSmall' selectable style={{ color: theme.colors.primary }}>Demand No. : {demand?.demandNo === '' ? 'Not Generated' : demand?.demandNo}</Text>
                                         <Text variant='bodySmall' style={{}}>Financial Year: {demand.fyName}</Text>
                                     </View>
                                     <Pressable onPress={() => navigation.push('ListDemandTxns', { demandId: demand.demandId, demandNo: demand.demandNo })}>
-                                        <Text variant='bodySmall' style={{color: theme.colors.primary, textDecorationLine:'underline'}}>All Transactions</Text>
+                                        <Text variant='bodySmall' style={{ color: theme.colors.primary, textDecorationLine: 'underline' }}>All Transactions</Text>
                                     </Pressable>
                                     {/* <IconButton mode='text' icon={() => <Icon name='format-list-text' size={20} color={theme.colors.primary} />}
                                         onPress={() => navigation.push('ListDemandTxns', { demandId: demand.demandId })} /> */}
@@ -101,18 +118,20 @@ const DemandList = () => {
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', gap: 2, marginTop: 8 }}>
-                                <Pressable style={{ flex: 1, paddingVertical: 12, alignItems: 'center', backgroundColor: theme.colors.primary }}
-                                    onPress={() => navigation.push('ViewDemandPdf', { demandId: demand.demandId })}>
-                                    <Text variant='titleSmall' style={{ color: theme.colors.onPrimary }}>View Demand</Text>
-                                </Pressable>
-                                <Pressable style={{ flex: 1, paddingVertical: 12, alignItems: 'center', backgroundColor: theme.colors.primary }}
-                                    onPress={() => navigation.push('PaymentCollection', { demandId: demand.demandId, amountPending: demand.amountPending })}>
-                                    <Text variant='titleSmall' style={{ color: theme.colors.onPrimary }}>Payment</Text>
-                                </Pressable>
-                                {/* <Pressable style={{ flex: 1, paddingVertical: 12, alignItems: 'center', backgroundColor: theme.colors.primary }}
-                                    onPress={() => navigation.push('PaymentCollection', { demandId: demand.demandId, amountPending: demand.amountPending })}>
+                                {demand.demandNo && <>
+                                    <Pressable style={{ flex: 1, paddingVertical: 12, alignItems: 'center', backgroundColor: theme.colors.primary }}
+                                        onPress={() => navigation.push('ViewDemandPdf', { demandId: demand.demandId, demandNo: demand.demandNo, demandFile: demand.demandFile })}>
+                                        <Text variant='titleSmall' style={{ color: theme.colors.onPrimary }}>View Demand</Text>
+                                    </Pressable>
+                                    <Pressable style={{ flex: 1, paddingVertical: 12, alignItems: 'center', backgroundColor: theme.colors.primary }}
+                                        onPress={() => navigation.push('PaymentCollection', { demandId: demand.demandId, amountPending: demand.amountPending })}>
+                                        <Text variant='titleSmall' style={{ color: theme.colors.onPrimary }}>Payment</Text>
+                                    </Pressable>
+                                </>}
+                                {!demand.demandNo && <Pressable style={{ flex: 1, paddingVertical: 12, alignItems: 'center', backgroundColor: theme.colors.primary }}
+                                    onPress={() => generateDemandPdf(demand.propertyId, demand.demandId)}>
                                     <Text variant='titleSmall' style={{ color: theme.colors.onPrimary }}>Generate Demand</Text>
-                                </Pressable> */}
+                                </Pressable>}
                             </View>
                         </View>
                     )

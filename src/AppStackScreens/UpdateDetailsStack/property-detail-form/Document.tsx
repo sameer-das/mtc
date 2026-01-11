@@ -8,6 +8,7 @@ import { propertyDocumentDownload, propertyDocumentList, propertyDocumentUpload 
 import { PropertyContext } from '../../../contexts/PropertyContext';
 import Loading from '../../../components/Loading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { API_BASE_URL } from '../../../API/ApiClient';
 
 const getFileName = (filename: string) => {
   const splited = filename.split('.');
@@ -34,13 +35,13 @@ const Document = () => {
       if (data.code === 200 && data.status === 'Success') {
         for (let d of data.data) {
           if (d.documentType === 'Property_Image1') {
-            setImage1('http://181.214.10.5/api/Master/propertyDocumentDownload?fileName=' + d.documentName);
+            setImage1(`${API_BASE_URL}/Master/propertyDocumentDownload?fileName=${d.documentName}`);
           } else if (d.documentType === 'Property_Image2') {
-            setImage2('http://181.214.10.5/api/Master/propertyDocumentDownload?fileName=' + d.documentName);
+            setImage2(`${API_BASE_URL}/Master/propertyDocumentDownload?fileName=${d.documentName}`);
           } else if (d.documentType === 'Property_Image3') {
-            setImage3('http://181.214.10.5/api/Master/propertyDocumentDownload?fileName=' + d.documentName);
+            setImage3(`${API_BASE_URL}/Master/propertyDocumentDownload?fileName=${d.documentName}`);
           } else if (d.documentType === 'Property_Image4') {
-            setImage4('http://181.214.10.5/api/Master/propertyDocumentDownload?fileName=' + d.documentName);
+            setImage4(`${API_BASE_URL}/Master/propertyDocumentDownload?fileName=${d.documentName}`);
           }
         }
       }

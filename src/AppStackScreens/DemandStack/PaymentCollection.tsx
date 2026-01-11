@@ -164,6 +164,11 @@ const PaymentCollection = () => {
         Alert.alert('Validation Error', 'Please enter a valid amount.');
         return;
       }
+
+      if(Number(amount) > Number(route.params.amountPending)){
+        Alert.alert('Validation Error', 'Entered amount cannot be more than pending amount.');
+        return;
+      }
     }
 
 
@@ -253,7 +258,7 @@ const PaymentCollection = () => {
         <Dropdown label="Remark" options={remarkOptions} value={remark} onSelect={setRemark} />
         {!hideAmountTxn && <>
           <Input label="Amount" disabled={disableAmount} value={amount} keyboardType="numeric" onChangeText={setAmount} />
-          <Input label="Transaction Number" disabled={disableTransactionNo} value={trasactionNo} onChangeText={setTransactionNo} />
+          <Input label="Transaction Number" disabled={disableTransactionNo} value={trasactionNo} onChangeText={(tx: string) => setTransactionNo(tx.toUpperCase())} />
         </>}
         {showNextVisitDate && <Datepicker date={nextVisitDate} onConfirm={setNextVisitDate} minimumDate={new Date()} />}
         {showCustomReason && <Input value={otherReason} onChangeText={setOtherReason} label="Type other reason" />}
