@@ -24,7 +24,7 @@ const DemandList = () => {
             // console.log('fetch ward ', zoneId)
             const { data } = await getDemandsOfProperty(property?.propertyId || 0, 0, 0);
             console.log(data)
-            if (data.code === 200 && data.status === 'Success') {
+            if (data.code === 200 && data.status === 'Success' && data.data.demands) {
                 setDemands(data.data.demands);
             }
         } catch (error) {
@@ -67,15 +67,17 @@ const DemandList = () => {
                 <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>All Demands</Text>
 
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
                     <Text variant='titleMedium' style={{ color: theme.colors.primary, fontWeight: 'bold', textAlign: 'right' }}>Total Due: {12000}</Text>
-                </View>
+                </View> */}
 
                 {/* <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'flex-end', paddingVertical: 8 }}>
                     <Pressable onPress={() => navigation.push('ListDemandTxns', { demandId: demand.demandId })}>
                         <Text style={{ color: theme.colors.primary, textDecorationLine: 'underline', fontSize: 12, fontWeight: 'bold' }}>All Transactions</Text>
                     </Pressable>
                 </View> */}
+
+                {demands.length === 0 && <Text variant='bodyMedium'> No demands found</Text>}
 
                 {demands.map((demand, index) => {
                     return (

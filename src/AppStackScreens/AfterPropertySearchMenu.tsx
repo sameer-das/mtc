@@ -43,7 +43,7 @@ const AfterPropertySearchMenu = ({ navigation }) => {
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Mobile :</Text>
-                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.mobile || 'Not Updated'}</Text>
+                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.mobile || property?.attribute5 || 'Not Updated'}</Text>
             </View>
             
             <View style={{ display: 'flex', gap: 12, marginTop: 40 }}>

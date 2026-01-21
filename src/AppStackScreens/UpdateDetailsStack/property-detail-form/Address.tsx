@@ -95,6 +95,7 @@ const Address = () => {
 
   const updateDetails = async (values: PropertyAddressType) => {
     const updateAddressPayload: PropertyMaster = {
+      propertyId: property?.propertyId,
       householdNo: property?.householdNo,
 
       propertyAddress: values.propertyAddress,

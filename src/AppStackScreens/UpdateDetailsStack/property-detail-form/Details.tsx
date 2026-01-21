@@ -75,27 +75,10 @@ const Details = () => {
     const [zoneOptions, setZoneOptions] = useState<SelectType[]>([]);
     const [wardOptions, setWardOptions] = useState<SelectType[]>([]);
 
-    const [categryOptions, setCategoryOptions] = useState<SelectType[]>([
-        { label: 'School / Collage', value: 'value1' },
-        { label: 'Shop / Tea Stall', value: 'value2' },
-        { label: 'Restaurant', value: 'value3' },
-    ]);
-    const [subCategoryOptions, setSubCategoryOptions] = useState<SelectType[]>([
-        { label: '100 to 999 SQ MTR', value: 'value1' },
-        { label: '1000 to 1999 SQ MTR', value: 'value2' },
-        { label: 'Sub Category 3', value: 'value3' },
-    ]);
-    const [mohallaOptions, setMohallaOptions] = useState<SelectType[]>([
-        { label: 'Mohalla 1', value: 'value1' },
-        { label: 'Mohalla 2', value: 'value2' },
-        { label: 'Mohalla 3', value: 'value3' },
-    ]);
-    const [propertyTypeOptions, setPropertyTypeOptions] = useState<SelectType[]>([
-        { label: 'Residential (R)', value: '1' },
-        { label: 'Commercial (C)', value: '2' },
-        { label: 'Mix (M)', value: '3' },
-        { label: 'Vacant Land (P)', value: '4' },
-    ]);
+    const [categryOptions, setCategoryOptions] = useState<SelectType[]>([]);
+    const [subCategoryOptions, setSubCategoryOptions] = useState<SelectType[]>([]);
+    const [mohallaOptions, setMohallaOptions] = useState<SelectType[]>([]);
+    const [propertyTypeOptions, setPropertyTypeOptions] = useState<SelectType[]>([]);
 
 
     const [isIndividualBuilding, setIsIndividualBuilding] = useState(selectedOwnerShipType?.value === '1' ? true : false);
@@ -257,6 +240,7 @@ const Details = () => {
 
     const updateDetails = async (values: PropertyDetailType) => {
         const updateDetailsPayload: PropertyMaster = {
+            propertyId: property?.propertyId,
             householdNo: property?.householdNo,
             zone: values.zone?.value,
             ward: values.ward?.value,
@@ -322,6 +306,7 @@ const Details = () => {
                                 <View style={{ flex: 1 }}>
                                     <Dropdown options={zoneOptions} label="Zone" value={values.zone} onSelect={(zone: SelectType) => {
                                         setFieldValue('zone', zone);
+                                        setFieldValue('ward', {});
                                         fetchWard(+zone.value);
                                     }} />
                                 </View>

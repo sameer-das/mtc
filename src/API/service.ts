@@ -1,4 +1,4 @@
-import { AddDemandTxnType, LoginData, PropertyDocumentUploadPayload, PropertyMaster } from '../Models/models';
+import { AddDemandTxnType, LoginData, PropertyDocumentUploadPayload, PropertyMaster, QuickCreatePropertyType } from '../Models/models';
 
 import apiClient from './ApiClient';
 
@@ -163,4 +163,13 @@ export const addDemandTransaction = async (payload: AddDemandTxnType) => {
 export const generateDemand = async (propertyId: number, demandId: number, userId: number, lang: string = 'en',) => {
     return apiClient.get(`/Pdf/demandGenerate`, { params: { lang, propertyId, demandId, userId } });
 }
+
+export const quickCreateProperty = async (payload: QuickCreatePropertyType) => {
+    return apiClient.post(`/Master/QuickCreateProperty`, payload)
+}
+
+export const getPropertySurveys = async (user: string) => {
+    return apiClient.get(`/Master/getPropertySurveys`, { params: { user } })
+}
+
 

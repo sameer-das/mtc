@@ -14,6 +14,8 @@ import AddFloorData from './UpdateDetailsStack/property-detail-form/AddFloorData
 import PropertyDetailsForm from './UpdateDetailsStack/PropertyDetailsForm';
 import ViewDemandPdf from './DemandStack/ViewDemandPdf';
 import ListDemandTxns from './DemandStack/ListDemandTxns';
+import FirstForm from './CreatePropertyStack/FirstForm';
+import SurveyList from './SurveyListStack/SurveyList';
 
 const Stack = createNativeStackNavigator();
 const TopTabs = createMaterialTopTabNavigator();
@@ -34,23 +36,42 @@ const FormStack = () => {
 
 const UpdateDetailsStack = () => {
     return (<Stack.Navigator screenOptions={({ route }) => {
-            return { headerShown: false }
-        }}>
-            <Stack.Screen name='FormStack' component={FormStack} />
-            <Stack.Screen name='AddFloorData' component={AddFloorData} />
-        </Stack.Navigator>)
+        return { headerShown: false }
+    }}>
+        <Stack.Screen name='FormStack' component={FormStack} />
+        <Stack.Screen name='AddFloorData' component={AddFloorData} />
+    </Stack.Navigator>)
 }
 
 
 const DemandStack = () => {
     return (<Stack.Navigator screenOptions={({ route }) => {
-            return { headerShown: false }
-        }}>
-            <Stack.Screen name='DemandList' component={DemandList} />
-            <Stack.Screen name='PaymentCollection' component={PaymentCollection} />
-            <Stack.Screen name='ViewDemandPdf' component={ViewDemandPdf} />
-            <Stack.Screen name='ListDemandTxns' component={ListDemandTxns} />            
-        </Stack.Navigator>)
+        return { headerShown: false }
+    }}>
+        <Stack.Screen name='DemandList' component={DemandList} />
+        <Stack.Screen name='PaymentCollection' component={PaymentCollection} />
+        <Stack.Screen name='ViewDemandPdf' component={ViewDemandPdf} />
+        <Stack.Screen name='ListDemandTxns' component={ListDemandTxns} />
+    </Stack.Navigator>)
+}
+
+
+
+const CreatePropertyStack = () => {
+    return (<Stack.Navigator screenOptions={({ route }) => {
+        return { headerShown: false }
+    }}>
+        <Stack.Screen name='FirstForm' component={FirstForm} />
+    </Stack.Navigator>)
+}
+
+
+const SurveyListStack = () => {
+    return (<Stack.Navigator screenOptions={({ route }) => {
+        return { headerShown: false }
+    }}>
+        <Stack.Screen name='SurveyList' component={SurveyList} />
+    </Stack.Navigator>)
 }
 
 
@@ -62,7 +83,9 @@ const HomeStack = () => {
         }}>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Search" component={SearchForm} />
-            <Stack.Screen name="PropertyMenu" component={AfterPropertySearchMenu}/>
+            <Stack.Screen name="PropertyMenu" component={AfterPropertySearchMenu} />
+            <Stack.Screen name="CreatePropertyStack" component={CreatePropertyStack} />
+            <Stack.Screen name="SurveyListStack" component={SurveyListStack} />
             <Stack.Screen name="UpdateDetailsStack" component={UpdateDetailsStack} />
             <Stack.Screen name="DemandStack" component={DemandStack} />
             <Stack.Screen name="AadharAndPan" component={AadharAndPan} />

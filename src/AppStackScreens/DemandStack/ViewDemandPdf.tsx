@@ -6,12 +6,41 @@ import PopertyNumberBanner from '../PopertyNumberBanner';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
 import { API_BASE_URL } from '../../API/ApiClient';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 const ViewDemandPdf = () => {
   const safeAreaInsets = useSafeAreaInsets();
   const theme = useTheme();
   const route = useRoute();
   // console.log(route)
+
+
+  const downloadPdf = async () => {
+    const { config, fs } = ReactNativeBlobUtil;
+    const date = new Date();
+    const fileDir = fs.dirs.DownloadDir; // Standard Download folder on Android
+    console.log(fs)
+    const res = await config({
+      fileCache: true,
+    }).fetch('GET', `${API_BASE_URL}/Master/ownerDocumentDownload?fileName=${route.params.demandFile}`)
+      
+    const path = res.path();
+    await ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
+        {
+          name: `${route.params.demandFile}`,
+          parentFolder: 'MTC_DEMANDS', // Optional: e.g., 'MyAppFiles'
+          mimeType: 'application/pdf',
+        },
+        'Download', // The public directory (Download, Audio, Image, Video)
+        path
+      );
+      
+      // Optional: Remove the temporary file from cache
+      await fs.unlink(path);
+      Alert.alert('Download', 'The file downloaded successfully.');
+  };
+
+
 
 
   // const source = { uri: 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf', cache: true };
@@ -27,7 +56,7 @@ const ViewDemandPdf = () => {
             <Text variant='bodyMedium' selectable style={{ color: theme.colors.primary }} >{route.params.demandNo}</Text>
 
           </View>
-          <Button mode='outlined' onPress={() => Alert.alert('Coming Soon', 'This feature is under development.')}>Download</Button>
+          <Button mode='outlined' onPress={downloadPdf}>Download</Button>
         </View>
       </View>
 

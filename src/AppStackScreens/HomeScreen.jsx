@@ -17,9 +17,10 @@ const HomeScreen = ({ navigation }) => {
         <Button mode='outlined' icon={() => <Icon name='logout' size={20} color={theme.colors.primary} />} 
         style={{ marginTop: 10, width: '30%' }} onPress={logout}>Logout</Button>
       </View>
-      <View style={{ flex: 1, justifyContent:'center', gap: 20 }}>
-        <Button mode='contained' onPress={() => navigation.push('Search')}>Search Property</Button>
-        <Button mode='outlined' onPress={() => Alert.alert('Coming Soon', 'This feature is under development.')}>My Transaction History</Button>
+      <View style={{ flex: 1, marginTop: 80, gap: 16 }}>
+        <Button mode='contained' onPress={() => navigation.push('Search')}>Search Property/Survey</Button>
+        <Button mode='contained' onPress={() => navigation.push('CreatePropertyStack')}>Quick Add Property</Button>
+        <Button mode='outlined' onPress={() => navigation.push('SurveyListStack')}>My Surveys</Button>
       </View>
     </View>
   )

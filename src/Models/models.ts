@@ -121,3 +121,19 @@ export interface AddDemandTxnType {
   attribute3: string;
   attribute4: string;
 }
+
+export interface QuickCreatePropertyType {
+  salutation: string | number;
+  ownerName: string;
+  careOf: string;
+  guardianName: string;
+  mobile: string;
+  householdNo: string;
+  propertyType: string;
+  zone: number | string;
+  ward: number | string;
+  mohallaName: string;
+  category: number | string;
+  subCategory: number | string;
+  updatedBy: string;
+}

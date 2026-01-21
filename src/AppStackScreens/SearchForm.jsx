@@ -18,10 +18,10 @@ const SearchForm = ({ navigation }) => {
             const { data } = await getPropertyMasterDetail(householdNo);
             console.log(data)
             if (data.code === 200 && data.status === 'Success') {
-                if(data.data.householdNo) {
+                if(data.data.householdNo || data.data.attribute6) {
                     setProperty(data.data);
                     navigation.push('PropertyMenu');
-                } else if (!data.data.householdNo) {
+                } else if (!data.data.householdNo || !data.data.attribute6) {
                     Alert.alert('Not Found', 'Searched property not found.')
                 }
  
@@ -47,10 +47,10 @@ const SearchForm = ({ navigation }) => {
     return (
         <View style={{ ...styles.container, backgroundColor: theme.colors.background }}>
             <Loading visible={isLoading} />
-            <Text variant="titleLarge" style={{ marginTop: 160 }}>Search Property</Text>
+            <Text variant="titleLarge" style={{ marginTop: 160 }}>Search Property/Survey</Text>
             <View style={{ ...styles.formArea }}>
                 <Input value={householdNo}
-                    label="PIN/House Hold No"
+                    label="PIN/House Hold No./Survey No."
                     onChangeText={(nextValue) => setHouseholdNo(nextValue.toUpperCase())} />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 8 }}>
                     <Button disabled={isLoading || !householdNo} style={{ width: '40%' }} mode='contained' onPress={handleSearch}>Search</Button>
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     },
     formArea: {
         // alignItems:'center',
+        marginTop: 20,
         width: '100%',
         gap: 8,
     }

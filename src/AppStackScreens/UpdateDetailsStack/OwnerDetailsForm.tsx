@@ -13,6 +13,7 @@ import { PropertyContext } from '../../contexts/PropertyContext'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import PopertyNumberBanner from '../PopertyNumberBanner'
+import { CAREOF_OPTIONS, GENDER_OPTIONS, SALUTATION_OPTIONS } from '../../constants/constants'
 
 
 interface OwnerDetailType {
@@ -25,29 +26,9 @@ interface OwnerDetailType {
     dob: Date,
 }
 
-const SALUTATION_OPTIONS: SelectType[] = [
-    { label: 'Mr.', value: 'Mr.' },
-    { label: 'Mrs.', value: 'Mrs.' },
-    { label: 'Miss', value: 'Miss' },
-    { label: 'Mr.1', value: 'Mr.1' },
-    { label: 'Mrs.2', value: 'Mrs.2' },
-    { label: 'Miss3', value: 'Miss3' },
-    { label: 'Mr.4', value: 'Mr.4' },
-    { label: 'Mrs.5', value: 'Mrs.5' },
-    { label: 'Miss6', value: 'Miss6' },
-];
 
-const GENDER_OPTIONS: SelectType[] = [
-    { label: 'Male', value: 'M' },
-    { label: 'Female', value: 'F' },
-    { label: 'Others', value: 'O' },
-];
 
-const CAREOF_OPTINS: SelectType[] = [
-    { label: 'S/O', value: 'S/o' },
-    { label: 'W/O', value: 'W/o' },
-    { label: 'D/O', value: 'D/o' },
-];
+
 
 const ownerDetailSchema = Yup.object().shape({
     // salutation: Yup.string().required('Please choose salutation'),
@@ -72,7 +53,7 @@ const OwnerDetailsForm = () => {
     const [initialValue, setInitialValue] = useState<OwnerDetailType>({
         salutation: SALUTATION_OPTIONS[0],
         ownerName: '',
-        careOf: CAREOF_OPTINS[0],
+        careOf: CAREOF_OPTIONS[0],
         guardianName: '',
         gender: GENDER_OPTIONS[0],
         mobile: '',
@@ -87,11 +68,11 @@ const OwnerDetailsForm = () => {
         if (resp.data.code === 200 && resp.data.status === 'Success') {
             setInitialValue({
                 salutation: SALUTATION_OPTIONS.find(opt => opt.value === resp.data.data.salutation) || SALUTATION_OPTIONS[0],
-                ownerName: resp.data.data.ownerName,
-                careOf: CAREOF_OPTINS.find(opt => opt.value === resp.data.data.careOf) || CAREOF_OPTINS[0],
+                ownerName: resp.data.data.ownerName || property?.ownerName,
+                careOf: CAREOF_OPTIONS.find(opt => opt.value === resp.data.data.careOf) || CAREOF_OPTIONS[0],
                 guardianName: resp.data.data.guardianName,
                 gender: GENDER_OPTIONS.find(opt => opt.value === resp.data.data.gender) || GENDER_OPTIONS[0],
-                mobile: resp.data.data.mobile,
+                mobile: resp.data.data.mobile || property?.attribute5,
                 dob: new Date(resp.data.data.dob),
             })
         }
@@ -108,6 +89,7 @@ const OwnerDetailsForm = () => {
     const handleUpdateOwner = async (values: OwnerDetailType) => {
 
         const payload: PropertyMaster = {
+            propertyId: property?.propertyId,
             householdNo: property?.householdNo,
             ownerName: values.ownerName,
             salutaion: values.salutation.value as string,
@@ -167,7 +149,7 @@ const OwnerDetailsForm = () => {
 
                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}>
                                 <View style={{ width: '25%' }}>
-                                    <Dropdown options={CAREOF_OPTINS} label="Care Of" value={values.careOf} onSelect={(co: SelectType) => setFieldValue('careOf', co)} />
+                                    <Dropdown options={CAREOF_OPTIONS} label="Care Of" value={values.careOf} onSelect={(co: SelectType) => setFieldValue('careOf', co)} />
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Input label='Care Of Name' value={values.guardianName} onChangeText={handleChange('guardianName')} />
