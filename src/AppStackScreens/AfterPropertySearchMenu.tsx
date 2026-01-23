@@ -2,26 +2,14 @@ import { Alert, StyleSheet, View } from 'react-native'
 import React, { useCallback, useContext, useState } from 'react'
 import { Button, Text, useTheme } from 'react-native-paper'
 import { PropertyContext } from '../contexts/PropertyContext';
-import { getOwnerDetails } from '../API/service';
 import { useFocusEffect } from '@react-navigation/native';
 import PopertyNumberBanner from './PopertyNumberBanner';
 
 const AfterPropertySearchMenu = ({ navigation }) => {
     const theme = useTheme();
-    const { property } = useContext(PropertyContext);
-    const [owner, setOwner] = useState({});
-
-    const fetchOwnerDetails = async (ownerId: number) => {
-        const resp = await getOwnerDetails(ownerId);
-        if (resp.data.code === 200 && resp.data.status === 'Success') {
-            setOwner(resp.data.data)
-        } else {
-            setOwner({})
-        }
-    }
+    const { property } = useContext(PropertyContext);    
 
     useFocusEffect(useCallback(() => {
-        fetchOwnerDetails(property?.ownerId || 0);
         return () => { console.log('AfterPropertySearchMenu blurred') }
     }, []))
 
@@ -31,19 +19,19 @@ const AfterPropertySearchMenu = ({ navigation }) => {
             <Text variant='headlineSmall' style={{ textAlign: 'center', marginBottom: 12 }}>Owner Details</Text>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Owner Name : </Text>
-                <Text variant='titleSmall' style={{ width: '50%', color: theme.colors.primary, fontWeight: 'bold' }}>{owner?.salutation || ''} {owner?.ownerName || property?.ownerName || 'Not Updated'}</Text>
+                <Text variant='titleSmall' style={{ width: '50%', color: theme.colors.primary, fontWeight: 'bold' }}>{property?.salutation || ''} {property?.ownerName || 'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
-                <Text variant='titleMedium' style={{ width: '50%' }}>{owner.careOf || 'C/o'} :</Text>
-                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.guardianName ||  'Not Updated'}</Text>
+                <Text variant='titleMedium' style={{ width: '50%' }}>{property?.careOf || 'C/o'} :</Text>
+                <Text variant='titleSmall' style={{ width: '50%' }}>{property?.guardianName ||  'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Gender :</Text>
-                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.gender || 'Not Updated'}</Text>
+                <Text variant='titleSmall' style={{ width: '50%' }}>{property?.gender || 'Not Updated'}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Mobile :</Text>
-                <Text variant='titleSmall' style={{ width: '50%' }}>{owner?.mobile || property?.attribute5 || 'Not Updated'}</Text>
+                <Text variant='titleSmall' style={{ width: '50%' }}>{property?.mobile || property?.attribute5 || 'Not Updated'}</Text>
             </View>
             
             <View style={{ display: 'flex', gap: 12, marginTop: 40 }}>

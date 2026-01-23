@@ -1,19 +1,19 @@
+import { Formik } from 'formik'
 import React, { useContext, useEffect, useState } from 'react'
 import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native'
-import { Button, Text, useTheme, Snackbar } from 'react-native-paper'
+import { Button, Text, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import * as Yup from 'yup'
+import { getPropertyMasterDetail, updatePropertyMaster } from '../../API/service'
 import Datepicker from '../../components/Datepicker'
 import Dropdown from '../../components/Dropdown'
 import Input from '../../components/Input'
 import Loading from '../../components/Loading'
-import { PropertyMaster, SelectType } from '../../Models/models'
-import { getOwnerDetails, updatePropertyMaster } from '../../API/service'
+import { CAREOF_OPTIONS, GENDER_OPTIONS, SALUTATION_OPTIONS } from '../../constants/constants'
 import { AuthContext } from '../../contexts/AuthContext'
 import { PropertyContext } from '../../contexts/PropertyContext'
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { PropertyMaster, SelectType } from '../../Models/models'
 import PopertyNumberBanner from '../PopertyNumberBanner'
-import { CAREOF_OPTIONS, GENDER_OPTIONS, SALUTATION_OPTIONS } from '../../constants/constants'
 
 
 interface OwnerDetailType {
@@ -50,40 +50,20 @@ const OwnerDetailsForm = () => {
     const theme = useTheme();
     const safeAreaInsets = useSafeAreaInsets();
     const [loading, setLoading] = useState(false);
-    const [initialValue, setInitialValue] = useState<OwnerDetailType>({
-        salutation: SALUTATION_OPTIONS[0],
-        ownerName: '',
-        careOf: CAREOF_OPTIONS[0],
-        guardianName: '',
-        gender: GENDER_OPTIONS[0],
-        mobile: '',
-        dob: new Date(),
-    });
     const { user } = useContext(AuthContext);
 
-    const { property } = useContext(PropertyContext);
+    const { property, setProperty } = useContext(PropertyContext);
 
-    const fetchOwnerDetails = async (ownerId: number) => {
-        const resp = await getOwnerDetails(ownerId);
-        if (resp.data.code === 200 && resp.data.status === 'Success') {
-            setInitialValue({
-                salutation: SALUTATION_OPTIONS.find(opt => opt.value === resp.data.data.salutation) || SALUTATION_OPTIONS[0],
-                ownerName: resp.data.data.ownerName || property?.ownerName,
-                careOf: CAREOF_OPTIONS.find(opt => opt.value === resp.data.data.careOf) || CAREOF_OPTIONS[0],
-                guardianName: resp.data.data.guardianName,
-                gender: GENDER_OPTIONS.find(opt => opt.value === resp.data.data.gender) || GENDER_OPTIONS[0],
-                mobile: resp.data.data.mobile || property?.attribute5,
-                dob: new Date(resp.data.data.dob),
-            })
-        }
-    }
+    const [initialValue, setInitialValue] = useState<OwnerDetailType>({
+        salutation: SALUTATION_OPTIONS.find(opt => opt.value === property?.salutation) || SALUTATION_OPTIONS[0],
+        ownerName: property?.ownerName || '',
+        careOf: CAREOF_OPTIONS.find(opt => opt.value === property?.careOf) || CAREOF_OPTIONS[0],
+        guardianName: property?.guardianName || '',
+        gender: GENDER_OPTIONS.find(opt => opt.value === property?.gender) || GENDER_OPTIONS[0],
+        mobile: property?.mobile || '',
+        dob: property?.dob ? new Date(property.dob) : new Date(),
+    });
 
-
-    useEffect(() => {
-        if (property?.ownerId) {
-            fetchOwnerDetails(property.ownerId);
-        }
-    }, [property?.ownerId]);
 
 
     const handleUpdateOwner = async (values: OwnerDetailType) => {
@@ -92,9 +72,9 @@ const OwnerDetailsForm = () => {
             propertyId: property?.propertyId,
             householdNo: property?.householdNo,
             ownerName: values.ownerName,
-            salutaion: values.salutation.value as string,
+            salutation: values.salutation.value as string,
             careOf: values.careOf.value as string,
-            guardianName: values.guardianName ,
+            guardianName: values.guardianName,
             gender: values.gender.value as string,
             dob: getDate(values.dob.toISOString()),
             mobile: values.mobile,
@@ -106,13 +86,21 @@ const OwnerDetailsForm = () => {
             const resp = await updatePropertyMaster(payload);
 
             if (resp.data.code === 200 && resp.data.status === 'Success') {
-                Alert.alert('Success', 'Owner details updated successfully')
+                Alert.alert('Success', 'Details updated successfully');
+
+                const { data: updatedPropertyResp } = await getPropertyMasterDetail('householdNo', String(property?.householdNo || property?.surveyNo));
+                console.log(updatedPropertyResp)
+                if (updatedPropertyResp.code === 200 && updatedPropertyResp.status === 'Success') {
+                    if (updatedPropertyResp.data.length > 0)
+                        setProperty(updatedPropertyResp.data[0]);
+                }
+
             } else {
-                Alert.alert('Fail', 'Failed while updating owner details.')
+                Alert.alert('Fail', 'Failed while updating details.')
             }
         } catch (e) {
             console.log(e);
-            Alert.alert('Error', 'Error while updating owner details.')
+            Alert.alert('Error', 'Error while updating details.')
         } finally {
             setLoading(false)
         }
@@ -188,7 +176,7 @@ const OwnerDetailsForm = () => {
                                 <View style={{ flex: 1 }}>
                                     <Text style={{ color: theme.colors.error, fontSize: 12 }}>{errors.mobile ? errors.mobile : null}</Text>
                                 </View>
-                            </View>                            
+                            </View>
                             <Button style={{ marginTop: 8 }} mode='contained' disabled={!isValid} onPress={handleSubmit}>Update Owner Detail</Button>
                             {/* <Text>{JSON.stringify(errors.dob)}</Text> */}
                         </View>)

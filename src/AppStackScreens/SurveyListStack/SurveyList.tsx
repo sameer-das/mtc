@@ -44,17 +44,22 @@ const SurveyList = () => {
 
 
 
-    const handleSearch = async (householdNo: string) => {
+    const handleSearch = async (surveyNo: string) => {
+        if(!surveyNo) {
+            Alert.alert('Error', 'Survey No. not found!');
+            return;
+        }
+        
         try {
             setIsLoading(true)
-            const { data } = await getPropertyMasterDetail(householdNo);
+            const { data } = await getPropertyMasterDetail('householdNo', surveyNo);
             console.log(data)
             if (data.code === 200 && data.status === 'Success') {
-                if (data.data.householdNo || data.data.attribute6) {
-                    setProperty(data.data);
+                if (data.data[0]?.householdNo || data.data[0]?.surveyNo) {
+                    setProperty(data.data[0]);
                     setIsLoading(false);
                     navigation.push('PropertyMenu');
-                } else if (!data.data.householdNo || !data.data.attribute6) {
+                } else if (!data.data.householdNo || !data.data.surveyNo) {
                     Alert.alert('Not Found', 'Searched property not found.')
                 }
 
@@ -78,10 +83,10 @@ const SurveyList = () => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View>
 
-                    <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Survey No. : {item.attribute6}</Text>
+                    <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Survey No. : {item.surveyNo}</Text>
                     <Text variant='titleSmall'>Name of Owner: {item.ownerName}</Text>
                 </View>
-                <Button mode='outlined' onPress={() => handleSearch(item.attribute6)}>View</Button>
+                <Button mode='outlined' onPress={() => handleSearch(item.surveyNo)}>View</Button>
 
             </View>
 

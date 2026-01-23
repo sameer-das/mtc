@@ -43,7 +43,7 @@ const DemandGeneration = () => {
       <PopertyNumberBanner />
       <Text variant='headlineSmall' style={{ textAlign: 'center', marginBottom: 12 }}>Demand Generation</Text>
       <View>
-        <Text variant="titleSmall">Name: {property?.salutaion} {property?.ownerName}</Text>
+        <Text variant="titleSmall">Name: {property?.salutation} {property?.ownerName}</Text>
         {(property?.careOf && property?.guardianName) && <Text>{property?.careOf}: {property?.guardianName}</Text>}
         <Text variant="titleMedium" style={{ color: theme.colors.primary }}>Total Due: 5000</Text>
       </View>

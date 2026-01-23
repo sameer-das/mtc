@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/material-design-icons'
 import Geolocation from '@react-native-community/geolocation';
 import Loading from '../../../components/Loading';
-import { updatePropertyMaster } from '../../../API/service';
+import { getPropertyMasterDetail, updatePropertyMaster } from '../../../API/service';
 import { PropertyMaster } from '../../../Models/models';
 import { PropertyContext } from '../../../contexts/PropertyContext';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -24,10 +24,10 @@ interface PropertyAddressType {
   ownerAddressDistrict: string | null,
   ownerAddressCity: string | null,
   ownerAddressPin: string | null,
-  attribute0: string | null,
-  attribute1: string | null,
-  attribute2: string | null,
-  attribute3: string | null,
+  ownerAddressHouseNo: string | null,
+  ownerAddressLandmark: string | null,
+  propertyAddressHouseNo: string | null,
+  propertyAddressLandmark: string | null,
 }
 
 const validationSchema = Yup.object().shape({
@@ -43,7 +43,7 @@ const validationSchema = Yup.object().shape({
 
 
 const Address = () => {
-  const {property} = useContext(PropertyContext);
+  const { property, setProperty } = useContext(PropertyContext);
   const { user } = useContext(AuthContext);
 
 
@@ -56,11 +56,11 @@ const Address = () => {
     ownerAddress: property?.ownerAddress || null,
     ownerAddressDistrict: property?.ownerAddressDistrict || null,
     ownerAddressCity: property?.ownerAddressCity || null,
-    ownerAddressPin:  property?.ownerAddressPin || null,
-    attribute0: property?.attribute0 || null, // property house/buildig no
-    attribute1: property?.attribute1 || null, // propert landmark
-    attribute2: property?.attribute2 || null, //owner address house/building no
-    attribute3: property?.attribute3 || null, // owner address land mark
+    ownerAddressPin: property?.ownerAddressPin || null,
+    ownerAddressHouseNo: property?.ownerAddressHouseNo || null, // property house/buildig no
+    ownerAddressLandmark: property?.ownerAddressLandmark || null, // propert landmark
+    propertyAddressHouseNo: property?.propertyAddressHouseNo || null, //owner address house/building no
+    propertyAddressLandmark: property?.propertyAddressLandmark || null, // owner address land mark
   });
 
   const [longitude, setLongitude] = useState(property?.longitude);
@@ -102,15 +102,15 @@ const Address = () => {
       propertyAddressDistrict: values.propertyAddressDistrict,
       propertyAddressCity: values.propertyAddressCity,
       propertyAddressPin: values.propertyAddressPin,
-      attribute0: values.attribute0,
-      attribute1: values.attribute1,
+      ownerAddressHouseNo: values.ownerAddressHouseNo,
+      ownerAddressLandmark: values.ownerAddressLandmark,
 
       ownerAddress: values.ownerAddress,
       ownerAddressDistrict: values.ownerAddressDistrict,
-      ownerAddressCity:values.ownerAddressCity,
+      ownerAddressCity: values.ownerAddressCity,
       ownerAddressPin: values.ownerAddressPin,
-      attribute2: values.attribute2,
-      attribute3: values.attribute3,
+      propertyAddressHouseNo: values.propertyAddressHouseNo,
+      propertyAddressLandmark: values.propertyAddressLandmark,
 
       isOwnerAddressSame: Boolean(values.isOwnerAddressSame),
 
@@ -125,7 +125,13 @@ const Address = () => {
       const resp = await updatePropertyMaster(updateAddressPayload);
 
       if (resp.data.code === 200 && resp.data.status === 'Success') {
-        Alert.alert('Success', 'Address updated successfully')
+        Alert.alert('Success', 'Address updated successfully');
+
+        const { data: updatedPropertyResp } = await getPropertyMasterDetail('householdNo', String(property?.householdNo || property?.surveyNo));
+        if (updatedPropertyResp.code === 200 && updatedPropertyResp.status === 'Success') {
+          if (updatedPropertyResp.data.length > 0)
+            setProperty(updatedPropertyResp.data[0]);
+        }
       } else {
         Alert.alert('Fail', 'Failed while updating address.')
       }
@@ -142,7 +148,7 @@ const Address = () => {
   return (
     <ScrollView>
       <Loading visible={loading} />
-      <Formik initialValues={initialValues} enableReinitialize={true} validationSchema={validationSchema} 
+      <Formik initialValues={initialValues} enableReinitialize={true} validationSchema={validationSchema}
         onSubmit={(values) => updateDetails(values)}>
         {
           ({ values, errors, handleSubmit, setFieldValue, handleChange, isValid }) => {
@@ -206,10 +212,10 @@ const Address = () => {
                 </View>
                 <View style={{ display: 'flex', gap: 8 }}>
                   <View>
-                    <Input label='House No./Building No. of Property' value={values.attribute0} onChangeText={handleChange('attribute0')} />
+                    <Input label='House No./Building No. of Property' value={values.propertyAddressHouseNo} onChangeText={handleChange('propertyAddressHouseNo')} />
                   </View>
                   <View>
-                    <Input label='Landmark of Property' value={values.attribute1} onChangeText={handleChange('attribute1')} />
+                    <Input label='Landmark of Property' value={values.propertyAddressLandmark} onChangeText={handleChange('propertyAddressLandmark')} />
                   </View>
                 </View>
 
@@ -227,15 +233,15 @@ const Address = () => {
                       setFieldValue('ownerAddressDistrict', values.propertyAddressDistrict)
                       setFieldValue('ownerAddressCity', values.propertyAddressCity)
                       setFieldValue('ownerAddressPin', values.propertyAddressPin)
-                      setFieldValue('attribute2', values.attribute0)
-                      setFieldValue('attribute3', values.attribute1)
+                      setFieldValue('ownerAddressHouseNo', values.propertyAddressHouseNo)
+                      setFieldValue('ownerAddressLandmark', values.propertyAddressLandmark)
                     } else {
                       setFieldValue('ownerAddress', '')
                       setFieldValue('ownerAddressDistrict', '')
                       setFieldValue('ownerAddressCity', '')
                       setFieldValue('ownerAddressPin', '')
-                      setFieldValue('attribute2', '')
-                      setFieldValue('attribute3', '')
+                      setFieldValue('ownerAddressHouseNo', '')
+                      setFieldValue('ownerAddressLandmark', '')
                     }
                   }} />
                 </View>
@@ -270,10 +276,10 @@ const Address = () => {
                 </View>
                 <View style={{ display: 'flex', gap: 8 }}>
                   <View>
-                    <Input label='House No./Building No. of the Owner' disabled={values.isOwnerAddressSame} value={values.attribute2} onChangeText={handleChange('attribute2')} />
+                    <Input label='House No./Building No. of the Owner' disabled={values.isOwnerAddressSame} value={values.ownerAddressHouseNo} onChangeText={handleChange('ownerAddressHouseNo')} />
                   </View>
                   <View>
-                    <Input label='Landmark of the Owner' disabled={values.isOwnerAddressSame} value={values.attribute3} onChangeText={handleChange('attribute3')} />
+                    <Input label='Landmark of the Owner' disabled={values.isOwnerAddressSame} value={values.ownerAddressLandmark} onChangeText={handleChange('ownerAddressLandmark')} />
                   </View>
 
                 </View>

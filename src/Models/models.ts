@@ -77,7 +77,7 @@ export interface PropertyMaster {
   updatedBy?: string | null;
   updatedOn?: string | null;
   status?: boolean;
-  salutaion?: string | null;
+  salutation?: string | null;
   careOf?: string | null;
   guardianName?: string | null;
   gender?: string | null;
@@ -90,6 +90,11 @@ export interface PropertyMaster {
   identityProof?: string | null;
   photo?: string | null;
   specialCertificate?: string | null;
+  ownerAddressHouseNo?: string | null;
+  ownerAddressLandmark?: string | null;
+  propertyAddressHouseNo?: string | null;
+  propertyAddressLandmark?: string | null;
+  surveyNo?: string | null;
 }
 
 

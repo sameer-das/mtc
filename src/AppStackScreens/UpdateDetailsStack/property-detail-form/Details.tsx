@@ -9,7 +9,7 @@ import { Button, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/material-design-icons';
 import { useNavigation } from '@react-navigation/native';
-import { getCategories, getMohallaList, getPropertyType, getSubCategoriesOfCategory, getWardList, getZoneList, updatePropertyMaster } from '../../../API/service';
+import { getCategories, getMohallaList, getPropertyMasterDetail, getPropertyType, getSubCategoriesOfCategory, getWardList, getZoneList, updatePropertyMaster } from '../../../API/service';
 import { PropertyContext } from '../../../contexts/PropertyContext';
 import Loading from '../../../components/Loading';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -38,7 +38,7 @@ const validationSchema = Yup.object().shape({
 
 
 const Details = () => {
-    const { property } = useContext(PropertyContext);
+    const { property, setProperty } = useContext(PropertyContext);
     const { user } = useContext(AuthContext);
 
     const [ownershipTypeOptions, setOwnershipTypeOptions] = useState<SelectType[]>([
@@ -60,8 +60,8 @@ const Details = () => {
 
         propertyType: null,
         typeOfOwnerShip: selectedOwnerShipType || null,
-        widthOfRoad: property?.widthOfRoad || null,
-        area: property?.areaOfPlot || null,
+        widthOfRoad: String(property?.widthOfRoad) || null,
+        area: String(property?.areaOfPlot) || null,
 
         appartmentBuildingNo: property?.buildingNo || null,
         appartmentFlatNo: property?.flatNo || null,
@@ -185,7 +185,7 @@ const Details = () => {
             // console.log(data)
             if (data.code === 200 && data.status === 'Success') {
                 setCategoryOptions(data.data.categories.map(cur => ({ label: cur.categoryName, value: cur.categoryId })));
-                const ind = data.data.categories.findIndex(c => c.categoryId === (property?.category ? +property.category : 0) );
+                const ind = data.data.categories.findIndex(c => c.categoryId === (property?.category ? +property.category : 0));
                 // console.log(property?.propertyType)
                 // console.log(ind)
                 if (ind >= 0) {
@@ -209,7 +209,7 @@ const Details = () => {
             // console.log(data)
             if (data.code === 200 && data.status === 'Success') {
                 setPropertyTypeOptions(data.data.propertyTypes.map(cur => ({ label: cur.propertyTypeName, value: cur.propertyTypeName })));
-                const ind = data.data.propertyTypes.findIndex(c => c.propertyTypeName === property?.propertyType );
+                const ind = data.data.propertyTypes.findIndex(c => c.propertyTypeName === property?.propertyType);
                 // console.log(property?.category)
                 // console.log(ind)
                 if (ind >= 0) {
@@ -224,7 +224,7 @@ const Details = () => {
         }
     }
 
-    
+
 
 
 
@@ -262,7 +262,14 @@ const Details = () => {
             const resp = await updatePropertyMaster(updateDetailsPayload);
 
             if (resp.data.code === 200 && resp.data.status === 'Success') {
-                Alert.alert('Success', 'Property details updated successfully')
+                Alert.alert('Success', 'Property details updated successfully');
+                
+                const { data: updatedPropertyResp } = await getPropertyMasterDetail('householdNo', String(property?.householdNo || property?.surveyNo));
+                if (updatedPropertyResp.code === 200 && updatedPropertyResp.status === 'Success') {
+                    if (updatedPropertyResp.data.length > 0)
+                        setProperty(updatedPropertyResp.data[0]);
+                }
+
             } else {
                 Alert.alert('Fail', 'Failed while updating property details.')
             }
@@ -323,7 +330,7 @@ const Details = () => {
                                         setFieldValue('category', category);
                                         setFieldValue('subCategory', {});
                                         fetchSubCategories(+category.value);
-                                        }} />
+                                    }} />
                                 </View>
                             </View>
 

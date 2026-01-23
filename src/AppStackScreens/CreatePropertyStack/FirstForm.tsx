@@ -177,11 +177,11 @@ const FirstForm = () => {
             const { data } = await getPropertyMasterDetail(householdNo);
             console.log(data)
             if (data.code === 200 && data.status === 'Success') {
-                if (data.data.householdNo || data.data.attribute6) {
+                if (data.data.householdNo || data.data.surveyNo) {
                     setProperty(data.data);
                     setIsLoading(false);
                     navigation.push('PropertyMenu');
-                } else if (!data.data.householdNo || !data.data.attribute6) {
+                } else if (!data.data.householdNo || !data.data.surveyNo) {
                     Alert.alert('Not Found', 'Searched property not found.')
                 }
 

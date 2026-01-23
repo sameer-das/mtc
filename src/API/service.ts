@@ -81,7 +81,7 @@ export const updatePropertyMaster = async (payload: PropertyMaster) => {
         "updatedBy": payload.updatedBy || null,
         "updatedOn": null,
         "status": payload.status || null,
-        "salutaion": payload.salutaion || null,
+        "salutation": payload.salutation || null,
         "careOf": payload.careOf || null,
         "guardianName": payload.guardianName || null,
         "gender": payload.gender || null,
@@ -93,19 +93,20 @@ export const updatePropertyMaster = async (payload: PropertyMaster) => {
         "isSpecialOwner": payload.isSpecialOwner || null,
         "identityProof": payload.identityProof || null,
         "photo": payload.photo || null,
-        "specialCertificate": payload.specialCertificate || null
+        "specialCertificate": payload.specialCertificate || null,
+        "ownerAddressHouseNo": payload.ownerAddressHouseNo || null,
+        "ownerAddressLandmark": payload.ownerAddressLandmark || null,
+        "propertyAddressHouseNo": payload.propertyAddressHouseNo || null,
+        "propertyAddressLandmark": payload.propertyAddressLandmark || null,
+        "surveyNo": payload.surveyNo || null,
     }
     console.log(payloadToApi)
 
     return apiClient.post(`/Master/AddOrUpdatePropertyMaster`, payloadToApi);
 }
 
-export const getPropertyMasterDetail = async (pin: string) => {
-    return apiClient.get(`/Master/getPropertyMasterDetails?propertyNumber=${pin}`)
-}
-
-export const getOwnerDetails = async (ownerId: number) => {
-    return apiClient.get(`/Master/ownerDetails?ownerId=${ownerId}`)
+export const getPropertyMasterDetail = async (searchKey: string, searchValue: string) => {
+    return apiClient.get(`/Master/getPropertyMasterDetails`, { params: { searchKey, searchValue } })
 }
 
 export const getZoneList = async (pageNumber: number, pageSize: number) => {

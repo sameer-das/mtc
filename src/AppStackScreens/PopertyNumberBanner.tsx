@@ -9,7 +9,7 @@ const PopertyNumberBanner = () => {
   return (
     <View style={{}}>
       {property?.householdNo && <Text variant='labelSmall' selectable style={{ textAlign: 'right', color: theme.colors.primary }}>PIN: {property?.householdNo}</Text>}
-      {property?.attribute6 && <Text variant='labelSmall' selectable style={{ textAlign: 'right', color: theme.colors.primary }}>SURVEY: {property?.attribute6}</Text>}
+      {property?.surveyNo && <Text variant='labelSmall' selectable style={{ textAlign: 'right', color: theme.colors.primary }}>SURVEY: {property?.surveyNo}</Text>}
     </View>
   )
 }
