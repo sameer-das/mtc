@@ -1,4 +1,4 @@
-import { FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Switch, Text, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,7 +6,7 @@ import PopertyNumberBanner from '../PopertyNumberBanner';
 import { PropertyContext } from '../../contexts/PropertyContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { getDemandsTxnOfProperty } from '../../API/service';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { TRANSACTION_REMARKS } from '../../constants/constants';
 
 
@@ -27,6 +27,8 @@ const ListDemandTxns = () => {
   const { user } = useContext(AuthContext);
   const theme = useTheme();
   const route = useRoute();
+  const navigation = useNavigation();
+
   const [txns, setTxns] = useState([]);
   const [displayTxns, setDispalyTxns] = useState([]);
   const [showAllTxns, setShowAllTxns] = React.useState(false);
@@ -63,8 +65,17 @@ const ListDemandTxns = () => {
   }
 
 
+  const goToViewBillPdfPage = (item) => {
+    if (!item.billNo || item.billNo == 0) {
+      Alert.alert('Invalid', 'Invalid Bill No.')
+    } else {
+      navigation.push('ViewBillPdf', { billPdf: item.attribute1 });
+    }
+  }
+
+
   const renderItem = ({ item }) => (
-    <Pressable onPress={() => console.log(item)} style={{ borderBottomColor: theme.colors.onBackground, borderBottomWidth: 1, paddingVertical: 4 }}>
+    <Pressable onPress={() => goToViewBillPdfPage(item)} style={{ borderBottomColor: theme.colors.onBackground, borderBottomWidth: 1, paddingVertical: 4 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         {item.amountPaid === 0 ?
           <Text variant='titleSmall' style={{ color: theme.colors.primary }}>Visit Comment</Text> :

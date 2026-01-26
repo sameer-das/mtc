@@ -3,13 +3,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getPropertyMasterDetail, getPropertySurveys } from '../../API/service';
-import Loading from '../../components/Loading';
-import { AuthContext } from '../../contexts/AuthContext';
-import { PropertyContext } from '../../contexts/PropertyContext';
+import { getPropertyMasterDetail, getPropertySurveys } from '../API/service';
+import Loading from '../components/Loading';
+import { AuthContext } from '../contexts/AuthContext';
+import { PropertyContext } from '../contexts/PropertyContext';
 
-const SurveyList = () => {
-
+const ApproveProperty = () => {
+  
     const safeAreaInsets = useSafeAreaInsets();
     const { user } = useContext(AuthContext);
     const theme = useTheme();
@@ -26,7 +26,7 @@ const SurveyList = () => {
         try {
             setIsLoading(true);
             // const { data } = await getPropertySurveys(user.username);
-            const { data } = await getPropertyMasterDetail('createdBy', user.username);
+            const { data } = await getPropertyMasterDetail('attribute1', user.id);
             console.log(data);
             if (data.code === 200 && data.status === 'Success') {
                 setProperties(data.data);
@@ -79,7 +79,6 @@ const SurveyList = () => {
         <View style={{ borderBottomColor: theme.colors.onBackground, borderBottomWidth: 1, paddingVertical: 8 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View>
-
                     <Text variant='titleSmall' selectable style={{ color: theme.colors.primary }}>Survey No. : {item.surveyNo}</Text>
                     {item.householdNo && <Text variant='bodyMedium' selectable style={{ color: theme.colors.primary }}>Household No. : {item.householdNo}</Text>}
                     <Text variant='titleSmall'>Name of Owner: {item.ownerName}</Text>
@@ -95,7 +94,7 @@ const SurveyList = () => {
     return (
         <View style={{ ...styles.container, backgroundColor: theme.colors.background, marginBottom: safeAreaInsets.bottom }}>
             <Loading visible={isLoading} />
-            <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>All Surveys</Text>
+            <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>Properties awaiting my approval</Text>
             {properties.length === 0 ? <Text variant='bodyMedium'>No records found</Text> :
                 <FlatList data={properties} renderItem={renderItem} keyExtractor={item => item.propertyId} />
             }
@@ -103,7 +102,7 @@ const SurveyList = () => {
     )
 }
 
-export default SurveyList
+export default ApproveProperty
 
 const styles = StyleSheet.create({
     container: {

@@ -176,8 +176,8 @@ const PaymentCollection = () => {
       billDate: getDate(new Date().toISOString()),
       txnDate: getDate(new Date().toISOString()),
       billNo: 0,
-      propertyId: property?.propertyId,
-      demandId: route.params.demandId,
+      propertyId: property?.propertyId || 0,
+      demandId: route.params?.demandId || 0,
       amountPaid: [1, 2].includes(Number(remark?.value || 0)) ? amount : 0,
       remarks: String(remark?.value) || '',
       customReason: otherReason,
@@ -193,6 +193,7 @@ const PaymentCollection = () => {
     try {
       isLoading(true)
       const { data } = await addDemandTransaction(paylaod);
+      console.log(data)
       if (data.code === 200 && data.status === 'Success') {
         Alert.alert('Success', 'Transaction Added Successfully.');
         navigation.goBack();

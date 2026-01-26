@@ -1,4 +1,4 @@
-import { AddDemandTxnType, LoginData, PropertyDocumentUploadPayload, PropertyMaster, QuickCreatePropertyType } from '../Models/models';
+import { AddDemandTxnType, ApproveRejectPayload, LoginData, PropertyDocumentUploadPayload, PropertyMaster, QuickCreatePropertyType } from '../Models/models';
 
 import apiClient from './ApiClient';
 
@@ -106,6 +106,7 @@ export const updatePropertyMaster = async (payload: PropertyMaster) => {
 }
 
 export const getPropertyMasterDetail = async (searchKey: string, searchValue: string) => {
+    console.log({ searchKey, searchValue })
     return apiClient.get(`/Master/getPropertyMasterDetails`, { params: { searchKey, searchValue } })
 }
 
@@ -173,4 +174,14 @@ export const getPropertySurveys = async (user: string) => {
     return apiClient.get(`/Master/getPropertySurveys`, { params: { user } })
 }
 
+export const getFeatureMapping = async (userId: number, groupId: number) => {
+    return apiClient.get(`/Admin/getFeatureMapping`, { params: { userId, groupId } })
+}
 
+export const approveRejectProperty = async (payload: ApproveRejectPayload) => {
+    return apiClient.post(`/Master/approveRejectProperty`, payload);
+}
+
+export const getApprovalLog = async (propertyId: number) => {
+    return apiClient.get(`/Master/getApprovalLog`, { params: { propertyId } });
+}

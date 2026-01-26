@@ -26,6 +26,11 @@ const SearchForm = ({ navigation }) => {
                 } else {
                     setShowEmptyMessage(false);
                     setProperties(data.data);
+                    // If the result is exactly 1 then auto navigate
+                    if (data.data.length === 1) {
+                        setProperty(data.data[0]);
+                        navigation.push('PropertyMenu');
+                    }
                 }
             } else if (data.code === 404) {
                 Alert.alert('Message', data.data)
@@ -57,7 +62,7 @@ const SearchForm = ({ navigation }) => {
             navigation.push('PropertyMenu');
         }} style={{ borderWidth: 0.5, borderColor: theme.colors.primary, width: '100%', padding: 4 }}>
             <View style={{}}>
-                <Text variant='labelLarge' style={{color: theme.colors.primary}}>Owner Name: {item.ownerName}</Text>
+                <Text variant='labelLarge' style={{ color: theme.colors.primary }}>Owner Name: {item.ownerName}</Text>
                 {item.householdNo ? <Text style={{ color: theme.colors.secondary }} variant='labelMedium'>PIN/Household No: {item.householdNo}</Text> : null}
                 {item.surveyNo ? <Text style={{ color: theme.colors.secondary }} variant='labelMedium'>Survey No: {item.surveyNo}</Text> : null}
                 {(item.careOf && item.guardianName) && <Text variant='labelSmall'>{item.careOf}:  {item.guardianName}</Text>}

@@ -13,6 +13,7 @@ import { getCategories, getMohallaList, getPropertyMasterDetail, getPropertyType
 import { PropertyContext } from '../../../contexts/PropertyContext';
 import Loading from '../../../components/Loading';
 import { AuthContext } from '../../../contexts/AuthContext';
+import { OWNERSHIP_TYPE } from '../../../constants/constants';
 
 interface PropertyDetailType {
     zone: SelectType | null,
@@ -41,11 +42,7 @@ const Details = () => {
     const { property, setProperty } = useContext(PropertyContext);
     const { user } = useContext(AuthContext);
 
-    const [ownershipTypeOptions, setOwnershipTypeOptions] = useState<SelectType[]>([
-        { label: 'Individual Building', value: '1' },
-        { label: 'Flat in Appartment', value: '2' },
-        { label: 'Others', value: '3' },
-    ]);
+    const [ownershipTypeOptions, setOwnershipTypeOptions] = useState<SelectType[]>(OWNERSHIP_TYPE);
 
     const selectedOwnerShipType = ownershipTypeOptions.find((c) => c.value == property?.typeOfOwnership) || null;
 
@@ -57,8 +54,8 @@ const Details = () => {
 
         category: null,
         subCategory: null,
-
         propertyType: null,
+
         typeOfOwnerShip: selectedOwnerShipType || null,
         widthOfRoad: String(property?.widthOfRoad) || null,
         area: String(property?.areaOfPlot) || null,

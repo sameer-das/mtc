@@ -95,6 +95,14 @@ export interface PropertyMaster {
   propertyAddressHouseNo?: string | null;
   propertyAddressLandmark?: string | null;
   surveyNo?: string | null;
+  zoneName: string | null;
+  mohallaNameDetail: string | null;
+  categoryName: string | null;
+  subCategoryName: string | null;
+  approverName: string | null;
+  approverMobile: string | null;
+  approverEmail: string | null;
+  approverUserTypeName: string | null;
 }
 
 
@@ -141,4 +149,13 @@ export interface QuickCreatePropertyType {
   category: number | string;
   subCategory: number | string;
   updatedBy: string;
+}
+
+
+export interface ApproveRejectPayload {
+  logId: number;
+  approverUserId: number;
+  status: string;
+  comments: string;
+  propertyId: number;
 }

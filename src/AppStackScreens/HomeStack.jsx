@@ -5,17 +5,20 @@ import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AadharAndPan from './AadharAndPan';
 import AfterPropertySearchMenu from './AfterPropertySearchMenu';
+import FirstForm from './CreatePropertyStack/FirstForm';
 import DemandList from './DemandStack/DemandList';
+import ListDemandTxns from './DemandStack/ListDemandTxns';
 import PaymentCollection from './DemandStack/PaymentCollection';
+import ViewBillPdf from './DemandStack/ViewBillPdf';
+import ViewDemandPdf from './DemandStack/ViewDemandPdf';
 import HomeScreen from './HomeScreen';
 import SearchForm from './SearchForm';
+import SurveyList from './SurveyListStack/SurveyList';
 import OwnerDetailsForm from './UpdateDetailsStack/OwnerDetailsForm';
 import AddFloorData from './UpdateDetailsStack/property-detail-form/AddFloorData';
 import PropertyDetailsForm from './UpdateDetailsStack/PropertyDetailsForm';
-import ViewDemandPdf from './DemandStack/ViewDemandPdf';
-import ListDemandTxns from './DemandStack/ListDemandTxns';
-import FirstForm from './CreatePropertyStack/FirstForm';
-import SurveyList from './SurveyListStack/SurveyList';
+import ApproveProperty from './ApproveProperty';
+import ApprovalHistory from './ApprovalHistory';
 
 const Stack = createNativeStackNavigator();
 const TopTabs = createMaterialTopTabNavigator();
@@ -38,6 +41,7 @@ const UpdateDetailsStack = () => {
     return (<Stack.Navigator screenOptions={({ route }) => {
         return { headerShown: false }
     }}>
+
         <Stack.Screen name='FormStack' component={FormStack} />
         <Stack.Screen name='AddFloorData' component={AddFloorData} />
     </Stack.Navigator>)
@@ -52,6 +56,7 @@ const DemandStack = () => {
         <Stack.Screen name='PaymentCollection' component={PaymentCollection} />
         <Stack.Screen name='ViewDemandPdf' component={ViewDemandPdf} />
         <Stack.Screen name='ListDemandTxns' component={ListDemandTxns} />
+        <Stack.Screen name='ViewBillPdf' component={ViewBillPdf} />
     </Stack.Navigator>)
 }
 
@@ -66,11 +71,22 @@ const CreatePropertyStack = () => {
 }
 
 
+
 const SurveyListStack = () => {
     return (<Stack.Navigator screenOptions={({ route }) => {
         return { headerShown: false }
     }}>
         <Stack.Screen name='SurveyList' component={SurveyList} />
+    </Stack.Navigator>)
+}
+
+
+
+const ApprovalListStack = () => {
+    return (<Stack.Navigator screenOptions={({ route }) => {
+        return { headerShown: false }
+    }}>
+        <Stack.Screen name='ApproveProperty' component={ApproveProperty} />
     </Stack.Navigator>)
 }
 
@@ -84,11 +100,12 @@ const HomeStack = () => {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Search" component={SearchForm} />
             <Stack.Screen name="PropertyMenu" component={AfterPropertySearchMenu} />
+            <Stack.Screen name="ApprovalHistory" component={ApprovalHistory} />
             <Stack.Screen name="CreatePropertyStack" component={CreatePropertyStack} />
             <Stack.Screen name="SurveyListStack" component={SurveyListStack} />
             <Stack.Screen name="UpdateDetailsStack" component={UpdateDetailsStack} />
             <Stack.Screen name="DemandStack" component={DemandStack} />
-            <Stack.Screen name="AadharAndPan" component={AadharAndPan} />
+            <Stack.Screen name="ApprovalListStack" component={ApprovalListStack} />
         </Stack.Navigator>
     )
 }

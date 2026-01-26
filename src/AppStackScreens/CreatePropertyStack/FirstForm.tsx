@@ -229,7 +229,7 @@ const FirstForm = () => {
         console.log(paylod);
         // await handleSearch('AAAAAAA')
         try {
-            
+            setIsLoading(true)
             const { data } = await quickCreateProperty(paylod);
             console.log(data)
             if (data.code === 200 && data.status === 'Success') {
@@ -245,7 +245,7 @@ const FirstForm = () => {
             console.log(e);
             Alert.alert('Error', 'Error while adding property details.')
         } finally {
-            // setLoading(false)
+            setIsLoading(false)
         }
     }
 

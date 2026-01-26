@@ -28,3 +28,31 @@ export const CAREOF_OPTIONS: SelectType[] = [
     { label: 'W/O', value: 'W/o' },
     { label: 'D/O', value: 'D/o' },
 ];
+
+export const OWNERSHIP_TYPE: SelectType[] = [
+    { label: 'Individual Building', value: '1' },
+    { label: 'Flat in Appartment', value: '2' },
+    { label: 'Others', value: '3' },
+]
+
+export enum PERMISSIONS {
+    CREATE_USER_TYPE = 1,
+    MODIFY_USER_TYPE = 2,
+    VIEW_USER_TYPE = 3,
+
+    CREATE_USER = 4,
+    MODIFY_USER_DETAILS = 5,
+    MODIFY_USER_AADHAR_PAN = 6,
+    MODIFY_USER_DOCUMENT = 7,
+    MODIFY_USER_REPORTING_STRUCTURE = 8,
+    MODIFY_USER_PERMISSION = 9,
+    VIEW_USER = 10,
+
+    READ_MASTER_DATA = 11,
+    MODIFY_MASTER_DATA = 12,
+
+    ADD_PROPERTY = 13,
+    MODIFY_PROPERTY = 14,
+    COLLECT_PAYMENT = 15,
+    GENERATE_DEMAND = 16,
+}
