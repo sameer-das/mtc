@@ -53,12 +53,10 @@ const ApprovalHistory = () => {
         <View style={{ borderBottomColor: theme.colors.onBackground, borderBottomWidth: 1, paddingVertical: 8 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View>
-                    <Text variant='titleSmall' selectable style={{ color: theme.colors.primary }}>Survey No. : {item.surveyNo}</Text>
-                    {item.householdNo && <Text variant='bodyMedium' selectable style={{ color: theme.colors.primary }}>Household No. : {item.householdNo}</Text>}
-                    <Text variant='titleSmall'>Name of Owner: {item.ownerName}</Text>
+                    <Text variant='titleSmall' selectable style={{ color: theme.colors.primary }}>Status : {item.status}</Text>
+                    {item.householdNo && <Text variant='bodyMedium' selectable style={{ color: theme.colors.primary }}>Approver : {item.approverName}</Text>}
+                    <Text variant='titleSmall'>Date: {item.actionDate}</Text>
                 </View>
-                {/* <Button mode='outlined' onPress={() => handleSearch(item.propertyId)}>View</Button> */}
-
             </View>
 
         </View>
@@ -69,9 +67,9 @@ const ApprovalHistory = () => {
         <View style={{ ...styles.container, backgroundColor: theme.colors.background, marginBottom: safeAreaInsets.bottom }}>
             <Loading visible={isLoading} />
             <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>Approval History</Text>
-            {/* {history.length === 0 ? <Text variant='bodyMedium'>No records found</Text> :
-                <FlatList data={history} renderItem={renderItem} keyExtractor={item => item.propertyId} />
-            } */}
+            {history.length === 0 ? <Text variant='bodyMedium'>No records found</Text> :
+                <FlatList data={history} renderItem={renderItem} keyExtractor={item => item.logId} />
+            }
         </View>
     )
 }

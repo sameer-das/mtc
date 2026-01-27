@@ -95,14 +95,14 @@ export interface PropertyMaster {
   propertyAddressHouseNo?: string | null;
   propertyAddressLandmark?: string | null;
   surveyNo?: string | null;
-  zoneName: string | null;
-  mohallaNameDetail: string | null;
-  categoryName: string | null;
-  subCategoryName: string | null;
-  approverName: string | null;
-  approverMobile: string | null;
-  approverEmail: string | null;
-  approverUserTypeName: string | null;
+  zoneName?: string | null;
+  mohallaNameDetail?: string | null;
+  categoryName?: string | null;
+  subCategoryName?: string | null;
+  approverName?: string | null;
+  approverMobile?: string | null;
+  approverEmail?: string | null;
+  approverUserTypeName?: string | null;
 }
 
 

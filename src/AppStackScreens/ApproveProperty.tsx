@@ -94,7 +94,7 @@ const ApproveProperty = () => {
     return (
         <View style={{ ...styles.container, backgroundColor: theme.colors.background, marginBottom: safeAreaInsets.bottom }}>
             <Loading visible={isLoading} />
-            <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>Properties awaiting my approval</Text>
+            <Text variant="headlineSmall" style={{ textAlign: 'center', marginVertical: 8 }}>Awaiting Approval</Text>
             {properties.length === 0 ? <Text variant='bodyMedium'>No records found</Text> :
                 <FlatList data={properties} renderItem={renderItem} keyExtractor={item => item.propertyId} />
             }

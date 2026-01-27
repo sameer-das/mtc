@@ -104,10 +104,10 @@ const AfterPropertySearchMenu = () => {
             <MenuOptions />
 
             {/* Owner Details */}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text variant='titleLarge' style={{ color: theme.colors.primary, fontSize: 20 }}>Owner Details</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <IconButton icon='dots-horizontal' onPress={openMenu} />
             </View>
+            <Text variant='titleLarge' style={{ color: theme.colors.primary, fontSize: 20 }}>Owner Details</Text>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Text variant='titleMedium' style={{ width: '50%' }}>Owner Name : </Text>
                 <Text variant='titleSmall' style={{ width: '50%', color: theme.colors.primary, fontWeight: 'bold' }}>{property?.salutation || ''} {property?.ownerName || 'Not Updated'}</Text>

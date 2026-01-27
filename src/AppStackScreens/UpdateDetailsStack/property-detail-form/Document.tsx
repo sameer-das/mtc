@@ -27,6 +27,8 @@ const Document = () => {
   const [image3, setImage3] = useState('');
   const [image4, setImage4] = useState('');
 
+  const [ownerPhoto, setOwnerPhoto] = useState('');
+
   const fetchDocumentList = async () => {
     console.log("fetchDocumentList")
 
@@ -42,6 +44,8 @@ const Document = () => {
             setImage3(`${API_BASE_URL}/Master/propertyDocumentDownload?fileName=${d.documentName}`);
           } else if (d.documentType === 'Property_Image4') {
             setImage4(`${API_BASE_URL}/Master/propertyDocumentDownload?fileName=${d.documentName}`);
+          } else if (d.documentType === 'Owner_Photo') {
+            setOwnerPhoto(`${API_BASE_URL}/Master/propertyDocumentDownload?fileName=${d.documentName}`);
           }
         }
       }
@@ -96,12 +100,15 @@ const Document = () => {
   return (
     <ScrollView style={styles.contanier}>
       <View style={{ display: 'flex', gap: 12, marginBottom: safeAreaInsets.bottom + 80 }}>
-        <Text variant='titleSmall' style={{ marginVertical: 12, textAlign: 'center', color: theme.colors.primary }}>Upload images from 4 sides of the property.</Text>
         <View style={{}} >
+          <Text variant='titleMedium' style={{color: theme.colors.primary, textAlign:'center', textDecorationLine: 'underline'}}>Proeprty Related Documents</Text>
+        <Text variant='titleSmall' style={{ marginVertical: 8, color: theme.colors.primary }}>Upload images from 4 sides of the property.</Text>
           <CustomImagePicker identifier='Property_Image1' label='Image 1' value={image1} setValue={(v: string) => setImage1(v)} placeholder='Tap to choose image.' onUpload={handleUpload} />
           <CustomImagePicker identifier='Property_Image2' label='Image 2' value={image2} setValue={(v: string) => setImage2(v)} placeholder='Tap to choose image.' onUpload={handleUpload} />
           <CustomImagePicker identifier='Property_Image3' label='Image 3' value={image3} setValue={(v: string) => setImage3(v)} placeholder='Tap to choose image.' onUpload={handleUpload} />
           <CustomImagePicker identifier='Property_Image4' label='Image 4' value={image4} setValue={(v: string) => setImage4(v)} placeholder='Tap to choose image.' onUpload={handleUpload} />
+          <Text variant='titleMedium' style={{color: theme.colors.primary, marginTop: 16, textAlign:'center', textDecorationLine: 'underline'}}>Owner Documents</Text>
+          <CustomImagePicker identifier='Owner_Photo' label='Owner Photo' value={ownerPhoto} setValue={(v: string) => setOwnerPhoto(v)} placeholder='Tap to choose image.' onUpload={handleUpload} />
         </View>
         {/* <Button style={{ marginTop: 30, marginBottom: 80 }} mode='contained' disabled={!image1 && !image2 && !image3 && !image4} onPress={handleUpload}>Upload Images</Button> */}
 

@@ -104,6 +104,7 @@ const HomeStack = () => {
             <Stack.Screen name="CreatePropertyStack" component={CreatePropertyStack} />
             <Stack.Screen name="SurveyListStack" component={SurveyListStack} />
             <Stack.Screen name="UpdateDetailsStack" component={UpdateDetailsStack} />
+            <Stack.Screen name="AadharAndPan" component={AadharAndPan} />
             <Stack.Screen name="DemandStack" component={DemandStack} />
             <Stack.Screen name="ApprovalListStack" component={ApprovalListStack} />
         </Stack.Navigator>
